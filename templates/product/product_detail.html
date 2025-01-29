@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mx-auto">
+    <h1 class="text-2xl font-bold">{{ product.name }}</h1>
+    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-auto rounded-lg shadow-lg">
+    <p class="mt-4">{{ product.description }}</p>
+    <form action="{% url 'basket' %}" method="post">
+        {% csrf_token %}
+        <label for="variant">انتخاب تنوع:</label>
+        <select name="variant_id" id="variant">
+            {% for variant in variants %}
+                <option value="{{ variant.id }}">{{ variant.name }}</option>
+            {% endfor %}
+        </select>
+        <input type="number" name="quantity" value="1" min="1">
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md">Add to Basket</button>
+    </form>
+</div>
+{% endblock %}

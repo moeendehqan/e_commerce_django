@@ -1,0 +1,41 @@
+{% load static %}
+<header class="bg-white shadow-md py-4">
+    <div class="container mx-auto">
+        <div class="flex justify-between items-center">
+            <div class="logo">
+                <a>
+                    <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.meta_title }}" class="max-h-12">
+                </a>
+            </div>
+
+            <nav class="main-nav">
+                <ul class="flex list-none gap-5">
+                    <li><a class="text-gray-800 font-bold no-underline">خانه</a></li>
+                    <li><a href="{% url 'categories' %}" class="text-gray-800 font-bold no-underline">دسته بندی ها</a></li>
+                    <li><a class="text-gray-800 font-bold no-underline">محصولات</a></li>
+                    <li><a class="text-gray-800 font-bold no-underline">درباره ما</a></li>
+                    <li><a class="text-gray-800 font-bold no-underline">تماس با ما</a></li>
+                </ul>
+            </nav>
+            
+            <div class="flex items-center gap-5">
+                <div class="relative">
+                    <form  method="get">
+                        <input type="text" name="q" placeholder="جستجو..." class="px-4 py-2 border border-gray-300 rounded-full">
+                        <button type="submit" class="absolute right-0 top-0 mt-2 mr-2"><i class="icon-search"></i></button>
+                    </form>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    {% if user.is_authenticated %}
+                        <a  class="profile-icon"><i class="icon-user"></i></a>
+                        <a  class="cart-icon"><i class="icon-cart"></i></a>
+                    {% else %}
+                        <a class="text-blue-500">ورود / ثبت نام</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
