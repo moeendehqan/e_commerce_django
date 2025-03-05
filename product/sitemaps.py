@@ -5,7 +5,7 @@ from .models import Product, Category
 
 class ProductSitemap(Sitemap):
     changefreq = "daily"  # فرکانس تغییر (مثلاً روزانه)
-    priority = 0.9        # اولویت (بین 0 تا 1)
+    priority = 1       # اولویت (بین 0 تا 1)
 
     def items(self):
         # چه اشیایی تو نقشه سایت باشن

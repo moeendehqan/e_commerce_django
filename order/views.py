@@ -15,6 +15,9 @@ from django.contrib import messages
 from .utiles import ZarinpalConfig
 from zarinpal import ZarinPal
 from core.models import SiteSettings
+import logging
+from user.utiles import SendSms
+
 
 class BasketView(TemplateView):
     template_name = 'basket/basket_page.html'
@@ -132,9 +135,6 @@ class CheckoutView(FormView):
         total = subtotal + self.SHIPPING_COST
         config = ZarinpalConfig()
         zarinpal = ZarinPal(config)
-
-
-
         payment = Payment(
             user=user,
             amount=total,
@@ -149,13 +149,14 @@ class CheckoutView(FormView):
             status='pending'
         )
         order.save()
+        total_riyal = int(total)*10
         response = zarinpal.payments.create({
-            "amount":total,
+            "amount":total_riyal,
             "callback_url":f"{SiteSettings.objects.all().first().url}/zarinpal/callback/",
-            "description":f"پرداخت {total} ريال برای {count} عدد کالا",
+            "description":f"پرداخت {total_riyal} ريال برای {count} عدد کالا",
             "mobile":user.mobile if user.mobile else "",
             "email":user.email if user.email else "",
-            "referrer_id":order.id
+            "referrer_id":order.id,
         })
         if "data" in response and "authority" in response["data"]:
             authority = response["data"]["authority"]
@@ -186,11 +187,13 @@ class CheckoutView(FormView):
 class ZarinpalCallbackView(TemplateView):
     def get(self, request, *args, **kwargs):
         status = request.GET.get('Status')
-        print(status)
         if status == 'OK':
 
             authority = request.GET.get('Authority')
-            payment = Payment.objects.get(authority=authority)
+            payment = Payment.objects.filter(authority=authority)
+            if not payment.exists():
+                return redirect('order:payment_failed')
+            payment = payment.first()
             config = ZarinpalConfig()
             zarinpal = ZarinPal(config)
             response = zarinpal.verifications.verify({
@@ -198,7 +201,6 @@ class ZarinpalCallbackView(TemplateView):
                     "authority": authority,
                 })
             
-            print(response['data'])
             if response["data"]["code"] == 100:
                 payment.status = 'paid'
                 payment.ref_id = response["data"]["ref_id"]
@@ -210,11 +212,20 @@ class ZarinpalCallbackView(TemplateView):
                 payment.save()
             baskets = Basket.objects.filter(user=payment.user)
             for basket in baskets:
+                product = basket.variant.product
+                product.count_sell += basket.quantity
+                product.save()
                 basket.delete()
+            send_sms = SendSms()
+            send_sms.send_new_order(payment.user, payment.amount)
+
             return redirect('order:payment_success')
         else:
-            authority = request.GET.get('authority')
-            payment = Payment.objects.get(authority=authority)
+            authority = request.GET.get('Authority')
+            payment = Payment.objects.filter(authority=authority)
+            if not payment.exists():
+                return redirect('order:payment_failed')
+            payment = payment.first()
             payment.status = 'failed'
             payment.save()
             return redirect('order:payment_failed')

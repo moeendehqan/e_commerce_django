@@ -1,8 +1,7 @@
 from django.shortcuts import  get_object_or_404
 from django.views.generic import TemplateView
-from .models import Category, Product, Variant, ProductImage
-from core.models import SiteSettings
-from order.models import Basket
+from .models import Category, Product, Variant, ProductImage, ProductAttributeValue
+
 
 class CategoryListView(TemplateView):
     template_name = 'product/categories.html'
@@ -45,6 +44,7 @@ class ProductDetailView(TemplateView):
         context['variants'] = Variant.objects.filter(product=product, is_active=True)
         context['default_variant'] = context['variants'].filter(is_default=True).first()  # تنوع پیش‌فرض
         context['product_images'] = ProductImage.objects.filter(product=product)  # تصاویر آلبوم
+        context['attributes'] = ProductAttributeValue.objects.filter(product=product)
         context['meta_tag'] = {
             'meta_title': 'محصول ' + product.meta_title,
             'meta_description': product.meta_description,

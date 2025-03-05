@@ -53,7 +53,7 @@ class SiteSettings(models.Model):
         help_text="شناسه ردیابی Microsoft Clarity رو اینجا وارد کنید (مثل qgw9n7vv32)"
     )
     umami_id = models.CharField(
-        max_length=20,
+        max_length=255,
         blank=True,
         null=True,
         verbose_name="شناسه ردیابی Umami",
@@ -83,7 +83,8 @@ class SiteSettings(models.Model):
 class SmsSetting(models.Model):
     username = models.CharField(max_length=255, null=True, blank=True, verbose_name='نام کاربری')
     password = models.CharField(max_length=255, null=True, blank=True, verbose_name='رمزعبور')
-    otp_id= models.CharField(max_length=255, null=True, blank=True, verbose_name='کد الگو')
+    otp_id= models.CharField(max_length=255, null=True, blank=True, verbose_name='کد الگوی ارسال کد تایید')
+    new_order_id = models.CharField(max_length=255, null=True, blank=True, verbose_name='کد الگوی سفارش جدید')
     def save(self, *args, **kwargs):
         self.pk = 1  # همیشه رکورد اول را ذخیره می‌کند
         super().save(*args, **kwargs)
@@ -149,7 +150,7 @@ class ContactMessage(models.Model):
 class Zarinpal(models.Model):
     merchant_id = models.CharField(max_length=255,null=True,blank=True)
     token = models.TextField(null=True, blank=True)
-    sandbox = models.BooleanField(default=True)
+    sandbox = models.BooleanField(default=False)
     def save(self, *args, **kwargs):
         self.pk = 1
         super().save(*args, **kwargs)

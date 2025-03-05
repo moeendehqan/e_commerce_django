@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Product, Variant, ProductImage, Color, Size
+from .models import Category, Product, Variant, ProductImage, Color, Size, Brand, ProductAttribute, ProductAttributeValue
 
 # Register your models here.
 @admin.register(Category)
@@ -52,4 +52,24 @@ class SizeAdmin(admin.ModelAdmin):
     list_filter = ('name', 'code')
     list_per_page = 10
 
+
+@admin.register(Brand)
+class BrandAdmin(admin.ModelAdmin):
+    list_display = ('name', 'slug')
+    search_fields = ('name', 'slug', 'description', 'meta_title', 'meta_description', 'meta_keywords')
+    list_per_page = 10
+
+
+@admin.register(ProductAttribute)
+class ProductAttributeAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    search_fields = ('name',)
+    list_per_page = 10
+
+
+@admin.register(ProductAttributeValue)
+class ProductAttributeValueAdmin(admin.ModelAdmin):
+    list_display = ('product', 'attribute', 'value')
+    search_fields = ('product', 'attribute', 'value')
+    list_per_page = 10
 

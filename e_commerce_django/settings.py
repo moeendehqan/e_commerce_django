@@ -29,7 +29,6 @@ INSTALLED_APPS = [
     'product',
     'order',
     'core',
-    'blog',
 ]
 
 MIDDLEWARE = [
@@ -118,7 +117,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
-
+APPEND_SLASH = True
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles") 
 
 
@@ -135,7 +134,7 @@ JAZZMIN_UI_TWEAKS = {
 
 }
 
-INSTALLED_APPS += ['ckeditor', 'ckeditor_uploader']
+# INSTALLED_APPS += ['ckeditor', 'ckeditor_uploader']
 CKEDITOR_UPLOAD_PATH = "uploads/"
 CKEDITOR_IMAGE_BACKEND = "pillow"
 CKEDITOR_CONFIGS = {
@@ -143,5 +142,31 @@ CKEDITOR_CONFIGS = {
         'toolbar': 'full',
         'height': 300,
         'width': '100%',
+    },
+}
+
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+
+    },
+    'loggers': {
+        '': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
     },
 }

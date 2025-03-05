@@ -6,3 +6,4 @@ class ZarinpalConfig:
         self.sandbox = Zarinpal.get_instance().sandbox
         self.merchant_id = Zarinpal.get_instance().merchant_id
         self.access_token = Zarinpal.get_instance().token
+        

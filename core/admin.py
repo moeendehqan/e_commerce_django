@@ -29,7 +29,7 @@ class SiteSettingsAdmin(admin.ModelAdmin):
 
 @admin.register(SmsSetting)
 class SmsSettingAdmin(admin.ModelAdmin):
-    fields = ["username", "password", "otp_id"]
+    fields = ["username", "password", "otp_id", "new_order_id"]
     def changelist_view(self, request, extra_context=None):
         # مطمئن می‌شیم که همیشه یه نمونه با pk=1 وجود داره
         SmsSetting.get_instance()
@@ -53,10 +53,15 @@ class HomeOptionAdmin(admin.ModelAdmin):
                 'fields': (
                     'slider',
                     'best_viewed',
+                    'best_viewed_count',
                     'new_products',
+                    'new_products_count',
                     'best_sellers',
+                    'best_sellers_count',
                     'offers',
+                    'offers_count',
                     'random_products',
+                    'random_products_count',
                 ),
                 'description': (
                     '<p class="text-blue-600 font-bold">راهنما:</p>'

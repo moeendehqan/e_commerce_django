@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 from django.urls import reverse
+from .utiles import convert_to_webp
 
 
 class Color(models.Model):
@@ -27,6 +28,31 @@ class Size(models.Model):
         verbose_name = 'سایز'
         verbose_name_plural = 'سایز‌ها'
 
+class Brand(models.Model):
+    name = models.CharField(max_length=200, verbose_name='نام برند')
+    slug = models.SlugField(max_length=200, verbose_name='اسلاگ')
+    image = models.ImageField(upload_to='media/brand/', null=True, blank=True, verbose_name='تصویر')
+    description = models.TextField(verbose_name='توضیحات')
+    meta_title = models.CharField(max_length=200, verbose_name='عنوان متا')
+    meta_description = models.TextField(verbose_name='توضیحات متا')
+    meta_keywords = models.TextField(verbose_name='کلمات کلیدی')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='تاریخ به‌روزرسانی')
+    class Meta:
+        verbose_name = 'برند'
+        verbose_name_plural = 'برندها'
+    def __str__(self):
+        return self.name
+    
+class ProductAttribute(models.Model):
+    name = models.CharField(max_length=200, verbose_name='نام ویژگی')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='تاریخ به‌روزرسانی')
+    class Meta:
+        verbose_name = 'ویژگی محصول'
+        verbose_name_plural = 'ویژگی‌های محصولات'
+    def __str__(self):
+        return self.name
 
 # Create your models here.
 class Category(models.Model):
@@ -50,16 +76,26 @@ class Category(models.Model):
         verbose_name = 'دسته‌بندی'
         verbose_name_plural = 'دسته‌بندی‌ها'
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        webp_path = convert_to_webp(self, 'image')
+        if webp_path:
+            self.image.name = webp_path
+            super().save(update_fields=['image'])
+
 class Product(models.Model):
     name = models.CharField(max_length=200, verbose_name='نام محصول')
     slug = models.SlugField(max_length=200, verbose_name='اسلاگ')
     description = models.TextField(verbose_name='توضیحات')
+    brand = models.ForeignKey(Brand, on_delete=models.SET_NULL, related_name='products', null=True, blank=True, verbose_name='برند')
+    new = models.BooleanField(default=True, verbose_name='جدید')
     image = models.ImageField(upload_to='media/product/', null=True, blank=True, verbose_name='تصویر')
     meta_title = models.CharField(max_length=200, verbose_name='عنوان متا')
     meta_description = models.TextField(verbose_name='توضیحات متا')
     meta_keywords = models.TextField(verbose_name='کلمات کلیدی')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products', verbose_name='دسته‌بندی')
     count_view = models.IntegerField(default=0, verbose_name='تعداد بازدید')
+    waranty = models.CharField(max_length=200,null=True, blank=True, verbose_name='گارانتی')
     count_sell = models.IntegerField(default=0, verbose_name='تعداد فروش')
     price = models.IntegerField(verbose_name='قیمت',null=True, blank=True)
     real_price = models.IntegerField(verbose_name='قیمت واقعی',null=True, blank=True)
@@ -71,10 +107,27 @@ class Product(models.Model):
         return self.name
     def get_absolute_url(self):
         return reverse('product_detail', args=[self.slug])
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        webp_path = convert_to_webp(self, 'image')
+        if webp_path:
+            self.image.name = webp_path
+            super().save(update_fields=['image'])
     class Meta:
         verbose_name = 'محصول'
         verbose_name_plural = 'محصولات'
 
+class ProductAttributeValue(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='attributes', verbose_name='محصول')
+    attribute = models.ForeignKey(ProductAttribute, on_delete=models.CASCADE, related_name='values', verbose_name='ویژگی')
+    value = models.CharField(max_length=200, verbose_name='مقدار')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='تاریخ به‌روزرسانی')
+    class Meta:
+        verbose_name = 'مقدار ویژگی محصول'
+        verbose_name_plural = 'مقدار ویژگی‌های محصولات'
+    def __str__(self):
+        return f"{self.product.name} - {self.attribute.name} - {self.value}"
 
 class Variant(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='variants', verbose_name='محصول')
@@ -128,4 +181,9 @@ class ProductImage(models.Model):
         verbose_name = 'تصویر محصول'
         verbose_name_plural = 'تصاویر محصولات'
 
-
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        webp_path = convert_to_webp(self, 'image')
+        if webp_path:
+            self.image.name = webp_path
+            super().save(update_fields=['image'])

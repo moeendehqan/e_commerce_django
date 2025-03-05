@@ -56,6 +56,42 @@
                     {% endfor %}
                 </div>
             </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6 border-t border-gray-200 pt-4">
+                <!-- برند -->
+                {% if product.brand %}
+                    <div class="flex items-center space-x-2 space-x-reverse">
+                        <i class="fas fa-trademark text-gray-500"></i>
+                        <span class="text-gray-600">برند:</span>
+                        <span class="font-medium text-gray-800">{{ product.brand.name }}</span>
+                    </div>
+                {% else %}
+                    <div class="flex items-center space-x-2 space-x-reverse">
+                        <i class="fas fa-trademark text-gray-500"></i>
+                        <span class="text-gray-600">برند:</span>
+                        <span class="text-gray-400">موجود نیست</span>
+                    </div>
+                {% endif %}
+                
+                <!-- جدید -->
+                <div class="flex items-center space-x-2 space-x-reverse">
+                    <i class="fas {% if product.new %}fa-box{% else %}fa-box-open{% endif %} text-gray-500"></i>
+                    <span class="text-gray-600">نوع:</span>
+                    <span class="font-medium text-gray-800">
+                        {% if product.new %}نو (جدید){% else %}دسته دوم{% endif %}
+                    </span>
+                </div>
+                
+                <!-- گارانتی -->
+                <div class="flex items-center space-x-2 space-x-reverse">
+                    <i class="fas fa-shield-alt text-gray-500"></i>
+                    <span class="text-gray-600">گارانتی:</span>
+                    {% if product.waranty %}
+                        <span class="font-medium text-gray-800">{{ product.waranty }}</span>
+                    {% else %}
+                        <span class="text-gray-400">موجود نیست</span>
+                    {% endif %}
+                </div>
+            </div>
 
             <!-- فرم افزودن به سبد -->
             <form action="{% url 'order:basket' %}" method="post" class="flex flex-col gap-4">
@@ -78,6 +114,17 @@
                 <i class="fas {% if default_variant.quantity > 0 %}fa-check-circle{% else %}fa-times-circle{% endif %} mr-1"></i>
                 {% if default_variant.quantity > 0 %}موجودی: {{ default_variant.quantity }} عدد{% else %}ناموجود{% endif %}
             </p>
+
+            <!-- ویژگی‌ها -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 border-t border-gray-200 pt-4">
+                {% for attribute in attributes %}
+                    <div class="flex items-center space-x-2 space-x-reverse bg-gray-50 rounded-lg p-3 hover:bg-gray-100 transition-colors">
+                        <i class="fas fa-tag text-blue-500"></i>
+                        <span class="text-gray-600">{{ attribute.attribute.name }}:</span>
+                        <span class="font-medium text-gray-800">{{ attribute.value }}</span>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
 </div>
