@@ -1,0 +1,83 @@
+{% load static %}
+<div class="relative w-full overflow-hidden rounded-lg shadow-lg">
+    <div id="slider-container" class="overflow-hidden relative w-full">
+        <div id="slider" class="flex transition-transform duration-700 ease-in-out">
+            {% for slider in sliders %}
+                <div class="slide w-full flex-shrink-0 relative">
+                    {% if slider.image %}
+                        <img src="{{ slider.image.url }}" alt="{{ slider.alt }}" class="w-full h-96 object-cover rounded-lg shadow-md">
+                        {% if slider.link %}
+                            <a href="{{ slider.link }}" target="_blank"
+                               class="absolute bottom-5 left-5 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md text-sm font-semibold transition-transform transform hover:scale-105">
+                                مشاهده
+                            </a>
+                        {% endif %}
+                    {% else %}
+                        <div class="w-full h-96 bg-gray-200 flex items-center justify-center rounded-lg">
+                            <p class="text-red-500 font-medium">تصویری برای "{{ slider.alt }}" وجود ندارد!</p>
+                        </div>
+                    {% endif %}
+                </div>
+            {% empty %}
+                <div class="min-w-full text-center py-12">
+                    <p class="text-gray-600 font-semibold">اسلایدی برای نمایش وجود ندارد!</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- دکمه‌های ناوبری -->
+    <button id="prev"
+        class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-900 bg-opacity-50 text-white p-3 rounded-full shadow-lg hover:bg-opacity-75 transition-transform hover:scale-110">
+        <i class="fas fa-chevron-right text-lg"></i>
+    </button>
+    <button id="next"
+        class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-900 bg-opacity-50 text-white p-3 rounded-full shadow-lg hover:bg-opacity-75 transition-transform hover:scale-110">
+        <i class="fas fa-chevron-left text-lg"></i>
+    </button>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const slider = document.getElementById('slider');
+    const slides = document.querySelectorAll('.slide');
+    const prevButton = document.getElementById('prev');
+    const nextButton = document.getElementById('next');
+    let currentIndex = 0;
+    const slideCount = slides.length;
+
+    if (slideCount <= 1) return;
+
+    // تنظیم عرض اسلایدر و اسلایدها
+    slider.style.width = `${slideCount * 100}%`;
+    slides.forEach(slide => {
+        slide.style.width = `${100 / slideCount}%`;
+    });
+
+    function showSlide(index) {
+        currentIndex = (index + slideCount) % slideCount;
+        slider.style.transform = `translateX(${currentIndex * (100 / slideCount)}%)`; // مقدار مثبت برای RTL
+    }
+
+    let autoSlide = setInterval(() => {
+        showSlide(currentIndex + 1);
+    }, 10000);
+
+    function resetAutoSlide() {
+        clearInterval(autoSlide);
+        autoSlide = setInterval(() => {
+            showSlide(currentIndex + 1);
+        }, 10000);
+    }
+
+    prevButton.addEventListener('click', () => {
+        showSlide(currentIndex - 1);
+        resetAutoSlide();
+    });
+
+    nextButton.addEventListener('click', () => {
+        showSlide(currentIndex + 1);
+        resetAutoSlide();
+    });
+});
+</script>

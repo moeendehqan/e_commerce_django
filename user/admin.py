@@ -18,8 +18,8 @@ class OtpAdmin(admin.ModelAdmin):
 
 @admin.register(Address)
 class AddressAdmin(admin.ModelAdmin):
-    list_display = ('user', 'address', 'city', 'province', 'postal_code')
-    search_fields = ('user', 'address', 'city', 'province', 'postal_code')
+    list_display = ('user', 'title', 'city', 'province', 'postal_code', 'phone', 'is_default')
+    search_fields = ('user__username', 'title', 'city', 'province', 'postal_code', 'phone')
     list_filter = ('city', 'province', 'postal_code')
     list_per_page = 10
 

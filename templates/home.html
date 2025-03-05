@@ -1,8 +1,65 @@
 {% extends 'base.html' %}
-
 {% block content %}
-<div class="flex justify-center items-center w-full mx-auto">
-    <img src="{{ sliders.image.url }}" alt="{{ sliders.alt }}" class="w-full h-auto rounded-lg shadow-lg">
-</div>
 
+{% include 'components/slider.html' with sliders=sliders %}
+
+{% comment %} collections {% endcomment %}
+<div class="container mx-auto mt-10">
+
+
+    {% comment %} offers {% endcomment %}
+    <div class="bg-gradient-to-r from-red-400 to-red-700 p-4 pb-6 rounded-md shadow-lg my-10">
+        <h2 class="text-3xl font-bold text-white text-start mb-5"><i class="fa-solid fa-fire"></i> تخفیف‌های ویژه</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {% for product in offers %}
+                {% include 'product/product_cart.html' %}
+            {% endfor %}
+        </div>
+    </div>
+    
+
+    {% comment %} best sellers {% endcomment %}
+    <div class="bg-gradient-to-r from-blue-400 to-blue-700 p-4 pb-6 rounded-md shadow-lg my-10">
+        <h2 class="text-3xl font-bold text-white text-start mb-5"><i class="fa-solid fa-basket-shopping"></i> پر فروش ها</h2>
+        <div class="w-full flex gap-10 flex-wrap justify-center">
+            {% for product in best_sellers %}
+                {% include 'product/product_cart.html' %}
+            {% endfor %}
+        </div>
+    </div>
+
+    {% comment %} new products {% endcomment %}
+    <div class="bg-gradient-to-r from-green-400 to-green-700 p-4 pb-6 rounded-md shadow-lg my-10">
+        <h2 class="text-3xl font-bold text-white text-start mb-5"><i class="fa-solid fa-bell"></i> جدیدترین ها</h2>
+        <div class="w-full flex gap-10 flex-wrap justify-center">
+            {% for product in new_products %}
+                {% include 'product/product_cart.html' %}
+            {% endfor %}
+        </div>
+    </div>
+
+    {% comment %} best viewed {% endcomment %}
+    <div class="bg-gradient-to-r from-yellow-400 to-yellow-700 p-4 pb-6 rounded-md shadow-lg my-10">
+        <h2 class="text-3xl font-bold text-white text-start mb-5"><i class="fa-solid fa-eye"></i> بیشترین بازدید</h2>
+        <div class="w-full flex gap-10 flex-wrap justify-center">
+            {% for product in best_viewed %}
+                {% include 'product/product_cart.html' %}
+            {% endfor %}
+        </div>
+    </div>
+
+    {% comment %} random products {% endcomment %}
+    <div class="bg-gradient-to-r from-purple-400 to-purple-700 p-4 pb-6 rounded-md shadow-lg my-10">
+        <h2 class="text-3xl font-bold text-white text-start mb-5"><i class="fa-solid fa-shuffle"></i> محصولات تصادفی</h2>
+        <div class="w-full flex gap-10 flex-wrap justify-center">
+            {% for product in random_products %}
+                {% include 'product/product_cart.html' %}
+            {% endfor %}
+        </div>
+    </div>
+
+
+
+    
+</div>
 {% endblock %}

@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static humanize %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12">
+    <!-- عنوان -->
+    <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-8 flex items-center justify-center gap-2">
+        <i class="fas fa-user-circle text-blue-600"></i> پروفایل شما
+    </h1>
+
+    {% if messages %}
+        <div class="mb-6">
+            {% for message in messages %}
+                <div class="p-4 rounded-md {% if message.tags == 'success' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
+                    <i class="fas {% if message.tags == 'success' %}fa-check-circle{% else %}fa-exclamation-circle{% endif %} mr-2"></i>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- اطلاعات پروفایل -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <!-- نمایش اطلاعات -->
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">اطلاعات شخصی</h2>
+            <div class="space-y-4">
+                <div class="flex items-center gap-3">
+                    <i class="fas fa-user text-blue-600"></i>
+                    <p class="text-gray-600"><strong>نام کاربری:</strong> {{ user.username }}</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <i class="fas fa-phone-alt text-blue-600"></i>
+                    <p class="text-gray-600"><strong>موبایل:</strong> {{ user.mobile }}</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <i class="fas fa-envelope text-blue-600"></i>
+                    <p class="text-gray-600"><strong>ایمیل:</strong> {{ user.email|default:"ثبت نشده" }}</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <i class="fas fa-venus-mars text-blue-600"></i>
+                    <p class="text-gray-600"><strong>جنسیت:</strong> {{ user.get_gender_display }}</p>
+                </div>
+
+                <img src="{{ user.avatar.url }}" alt="آواتار" class="w-32 h-32 rounded-full mx-auto mt-4 object-cover">
+            </div>
+        </div>
+
+        <!-- فرم ویرایش -->
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">ویرایش پروفایل</h2>
+            <form method="post" action="{% url 'profile' %}" enctype="multipart/form-data" class="space-y-4">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
+                    <i class="fas fa-save"></i> ذخیره تغییرات
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- لینک به مدیریت آدرس‌ها -->
+    <div class="mt-8 text-center">
+        <a href="{% url 'address_management' %}" class="inline-block bg-gray-600 text-white px-6 py-3 rounded-md hover:bg-gray-700 transition-colors flex items-center justify-center gap-2 mx-auto">
+            <i class="fas fa-map-marker-alt"></i> مدیریت آدرس‌ها
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% load humanize %}
+<div class="flex justify-between items-center bg-white rounded-lg shadow-md p-6">
+    <div class="text-lg font-semibold text-gray-800">
+        مجموع قیمت: 
+        <span class="text-blue-600">{{ total|intcomma }} تومان</span>
+    </div>
+    <a href="{% url 'order:checkout' %}" class="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-colors flex items-center gap-2">
+        <i class="fas fa-check-circle"></i> ثبت سفارش
+    </a>
+</div>

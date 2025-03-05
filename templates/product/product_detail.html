@@ -1,20 +1,139 @@
 {% extends 'base.html' %}
+{% load humanize static %}
 
 {% block content %}
-<div class="container mx-auto">
-    <h1 class="text-2xl font-bold">{{ product.name }}</h1>
-    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-auto rounded-lg shadow-lg">
-    <p class="mt-4">{{ product.description }}</p>
-    <form action="{% url 'basket' %}" method="post">
-        {% csrf_token %}
-        <label for="variant">انتخاب تنوع:</label>
-        <select name="variant_id" id="variant">
-            {% for variant in variants %}
-                <option value="{{ variant.id }}">{{ variant.name }}</option>
-            {% endfor %}
-        </select>
-        <input type="number" name="quantity" value="1" min="1">
-        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md">Add to Basket</button>
-    </form>
+<div class="container mx-auto px-4 py-8">
+    <!-- هدر محصول -->
+    <div class="mb-6">
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-800 flex items-center gap-2">
+            <i class="fas fa-box text-blue-600 mr-3"></i>
+            {{ product.name }}
+        </h1>
+        <div class="flex items-center text-sm text-gray-500 mt-2 gap-1">
+            <i class="fas fa-eye mr-1"></i> {{ product.count_view }} بازدید
+            <span class="mx-2">|</span>
+            <i class="fas fa-shopping-cart mr-1"></i> {{ product.count_sell }} فروش
+        </div>
+    </div>
+
+    <!-- بخش تصویر و اطلاعات -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- آلبوم عکس -->
+        <div>
+            <img id="main-image" src="{{ product.image.url }}" alt="{{ product.name }}"
+                 class="w-full h-96 object-cover rounded-lg shadow-lg mb-4">
+            <div class="grid grid-cols-4 gap-2">
+                {% for image in product_images %}
+                    <img src="{{ image.image.url }}" alt="{{ product.name }}"
+                         class="w-full h-20 object-cover rounded-md cursor-pointer hover:opacity-75"
+                         onclick="document.getElementById('main-image').src = this.src;">
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- اطلاعات و فرم -->
+        <div class="flex flex-col gap-4">
+            <p class="text-gray-600 text-base">{{ product.description }}</p>
+            
+            <!-- قیمت (داینامیک) -->
+            <div class="flex items-center gap-3">
+                <span id="real-price" class="text-2xl font-semibold text-gray-800">
+                    {{ default_variant.real_price|intcomma }} تومان
+                </span>
+                {% if default_variant.discount_percentage > 0 %}
+                    <span id="original-price" class="text-lg text-gray-500 line-through">
+                        {{ default_variant.price|intcomma }} تومان
+                    </span>
+                {% endif %}
+            </div>
+
+            <!-- نمایش تنوع‌ها به صورت کارت -->
+            <div class="mb-4">
+                <label class="block text-gray-700 font-medium mb-2">انتخاب تنوع:</label>
+                <div class="grid grid-cols-2 gap-4">
+                    {% for variant in variants %}
+                        {% include 'product/variant_card.html' with variant=variant %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- فرم افزودن به سبد -->
+            <form action="{% url 'order:basket' %}" method="post" class="flex flex-col gap-4">
+                {% csrf_token %}
+                <input type="hidden" name="variant_id" id="selected-variant-id" value="{{ default_variant.id }}">
+                <div class="flex items-center gap-4">
+                    <label for="quantity" class="text-gray-700 font-medium">تعداد:</label>
+                    <input type="number" name="quantity" id="quantity" value="1" min="1" 
+                           class="w-20 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <button type="submit" id="add-to-cart-btn"
+                            class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors flex items-center {% if default_variant.quantity <= 0 %}opacity-50 cursor-not-allowed{% endif %}"
+                            {% if default_variant.quantity <= 0 %}disabled{% endif %}>
+                        <i class="fas fa-cart-plus mr-2"></i> افزودن به سبد خرید
+                    </button>
+                </div>
+            </form>
+
+            <!-- موجودی (داینامیک) -->
+            <p id="stock-status" class="text-sm {% if default_variant.quantity > 0 %}text-green-600{% else %}text-red-600{% endif %}">
+                <i class="fas {% if default_variant.quantity > 0 %}fa-check-circle{% else %}fa-times-circle{% endif %} mr-1"></i>
+                {% if default_variant.quantity > 0 %}موجودی: {{ default_variant.quantity }} عدد{% else %}ناموجود{% endif %}
+            </p>
+        </div>
+    </div>
 </div>
+
+<!-- جاوااسکریپت برای مدیریت انتخاب تنوع -->
+<script>
+function selectVariant(card) {
+    // حذف استایل انتخاب از همه کارت‌ها
+    document.querySelectorAll('.variant-card').forEach(c => {
+        c.classList.remove('border-blue-500', 'shadow-md');
+    });
+    
+    // اضافه کردن استایل به کارت انتخاب‌شده
+    card.classList.add('border-blue-500', 'shadow-md');
+    
+    // به‌روزرسانی اطلاعات
+    const variantId = card.getAttribute('data-variant-id');
+    const realPrice = card.getAttribute('data-real-price');
+    const price = card.getAttribute('data-price');
+    const discount = card.getAttribute('data-discount');
+    const quantity = card.getAttribute('data-quantity');
+    
+    // به‌روزرسانی قیمت
+    document.getElementById('real-price').textContent = parseInt(realPrice).toLocaleString('fa-IR') + ' تومان';
+    const originalPrice = document.getElementById('original-price');
+    if (discount > 0) {
+        originalPrice.textContent = parseInt(price).toLocaleString('fa-IR') + ' تومان';
+        originalPrice.style.display = 'inline';
+    } else {
+        originalPrice.style.display = 'none';
+    }
+    
+    // به‌روزرسانی موجودی
+    const stockStatus = document.getElementById('stock-status');
+    if (quantity > 0) {
+        stockStatus.innerHTML = `<i class="fas fa-check-circle mr-1"></i> موجودی: ${quantity} عدد`;
+        stockStatus.classList.remove('text-red-600');
+        stockStatus.classList.add('text-green-600');
+    } else {
+        stockStatus.innerHTML = `<i class="fas fa-times-circle mr-1"></i> ناموجود`;
+        stockStatus.classList.remove('text-green-600');
+        stockStatus.classList.add('text-red-600');
+    }
+    
+    // به‌روزرسانی فرم
+    document.getElementById('selected-variant-id').value = variantId;
+    
+    // فعال/غیرفعال کردن دکمه افزودن به سبد
+    const addButton = document.getElementById('add-to-cart-btn');
+    if (quantity > 0) {
+        addButton.classList.remove('opacity-50', 'cursor-not-allowed');
+        addButton.removeAttribute('disabled');
+    } else {
+        addButton.classList.add('opacity-50', 'cursor-not-allowed');
+        addButton.setAttribute('disabled', 'true');
+    }
+}
+</script>
 {% endblock %}

@@ -1,0 +1,20 @@
+{% load humanize basket_tags %}
+<div class="bg-white rounded-lg shadow-md p-6 mb-8">
+    <table class="w-full text-right">
+        <thead>
+            <tr class="border-b text-gray-700">
+                <th class="py-4">محصول</th>
+                <th class="py-4">تنوع</th>
+                <th class="py-4">قیمت واحد</th>
+                <th class="py-4">تعداد</th>
+                <th class="py-4">جمع</th>
+                <th class="py-4">حذف</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for basket in baskets %}
+                {% include 'basket/basket_item.html' with basket=basket %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

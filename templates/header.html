@@ -1,41 +1,83 @@
 {% load static %}
-<header class="bg-white shadow-md py-4">
-    <div class="container mx-auto">
+<header class="bg-white shadow-md py-4 sticky top-0 z-50">
+    <div class="container mx-auto px-4">
         <div class="flex justify-between items-center">
-            <div class="logo">
-                <a>
-                    <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.meta_title }}" class="max-h-12">
+            <!-- منوی همبرگر برای موبایل -->
+            <button class="md:hidden text-gray-800 focus:outline-none z-50" id="mobile-menu-button" aria-label="منو">
+                <i class="fas fa-bars w-6 h-6"></i>
+            </button>
+
+            <!-- لوگو -->
+            <div class="logo flex items-center">
+                <a href="/" class="flex items-center gap-3 no-underline">
+                    <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.meta_title }}" class="h-12 w-auto">
+                    <span class="text-gray-800 font-bold text-xl">{{ site_settings.title }}</span>
                 </a>
             </div>
 
-            <nav class="main-nav">
-                <ul class="flex list-none gap-5">
-                    <li><a class="text-gray-800 font-bold no-underline">خانه</a></li>
-                    <li><a href="{% url 'categories' %}" class="text-gray-800 font-bold no-underline">دسته بندی ها</a></li>
-                    <li><a class="text-gray-800 font-bold no-underline">محصولات</a></li>
-                    <li><a class="text-gray-800 font-bold no-underline">درباره ما</a></li>
-                    <li><a class="text-gray-800 font-bold no-underline">تماس با ما</a></li>
+            <!-- منوی اصلی (دسکتاپ) -->
+            <nav class="main-nav hidden md:flex items-center gap-6">
+                <ul class="flex list-none gap-6">
+                    <li><a href="/" class="text-gray-700 font-semibold hover:text-blue-600 transition-colors">خانه</a></li>
+                    <li><a href="{% url 'categories' %}" class="text-gray-700 font-semibold hover:text-blue-600 transition-colors">دسته‌بندی‌ها</a></li>
+                    <li><a href="{% url 'about' %}" class="text-gray-700 font-semibold hover:text-blue-600 transition-colors">درباره ما</a></li>
+                    <li><a href="{% url 'contact' %}" class="text-gray-700 font-semibold hover:text-blue-600 transition-colors">تماس با ما</a></li>
                 </ul>
             </nav>
-            
-            <div class="flex items-center gap-5">
-                <div class="relative">
-                    <form  method="get">
-                        <input type="text" name="q" placeholder="جستجو..." class="px-4 py-2 border border-gray-300 rounded-full">
-                        <button type="submit" class="absolute right-0 top-0 mt-2 mr-2"><i class="icon-search"></i></button>
-                    </form>
-                </div>
-                
-                <div class="flex items-center gap-4">
-                    {% if user.is_authenticated %}
-                        <a  class="profile-icon"><i class="icon-user"></i></a>
-                        <a  class="cart-icon"><i class="icon-cart"></i></a>
-                    {% else %}
-                        <a class="text-blue-500">ورود / ثبت نام</a>
-                    {% endif %}
-                </div>
+
+            <!-- آیکون‌های کاربری -->
+            <div class="flex items-center gap-4">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'order:basket' %}" class="relative text-blue-500 hover:text-blue-700 transition-colors">
+                        <i class="fas fa-shopping-cart text-2xl"></i>
+                        {% if basket_count > 0 %}
+                            <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{{ basket_count }}</span>
+                        {% endif %}
+                    </a>
+                    <a href="{% url 'profile' %}" class="text-blue-500 hover:text-blue-700 transition-colors">
+                        <i class="fas fa-user-circle text-2xl"></i>
+                    </a>
+                    <a href="{% url 'logout' %}" class="text-blue-500 hover:text-blue-700 transition-colors">
+                        <i class="fas fa-sign-out-alt text-2xl"></i>
+                    </a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="text-blue-500 hover:text-blue-700 transition-colors">
+                        <i class="fas fa-sign-in-alt text-2xl"></i>
+                    </a>
+                {% endif %}
             </div>
+        </div>
+
+        <!-- منوی موبایل -->
+        <div id="mobile-menu" class="mobile-nav fixed inset-0 bg-white transform translate-x-full transition-transform duration-300 ease-in-out md:hidden">
+            <nav class="h-full pt-20 px-6">
+                <ul class="flex flex-col list-none gap-6">
+                    <li><a href="/" class="block py-3 text-gray-800 font-semibold hover:bg-gray-100 rounded-md transition-colors">خانه</a></li>
+                    <li><a href="{% url 'categories' %}" class="block py-3 text-gray-800 font-semibold hover:bg-gray-100 rounded-md transition-colors">دسته‌بندی‌ها</a></li>
+                    <li><a href="{% url 'about' %}" class="block py-3 text-gray-800 font-semibold hover:bg-gray-100 rounded-md transition-colors">درباره ما</a></li>
+                    <li><a href="{% url 'contact' %}" class="block py-3 text-gray-800 font-semibold hover:bg-gray-100 rounded-md transition-colors">تماس با ما</a></li>
+                </ul>
+            </nav>
         </div>
     </div>
 </header>
 
+<!-- جاوااسکریپت برای منوی موبایل -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    let isMenuOpen = false;
+
+    mobileMenuButton.addEventListener('click', function() {
+        isMenuOpen = !isMenuOpen;
+        if (isMenuOpen) {
+            mobileMenu.classList.remove('translate-x-full');
+            mobileMenu.classList.add('translate-x-0');
+        } else {
+            mobileMenu.classList.remove('translate-x-0');
+            mobileMenu.classList.add('translate-x-full');
+        }
+    });
+});
+</script>

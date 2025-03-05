@@ -1,0 +1,7 @@
+Pillow
+zarinpal-py-sdk
+zeep
+aiohttp
+django-jazzmin
+
+django-ckeditor

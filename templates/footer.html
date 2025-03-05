@@ -1,0 +1,80 @@
+{% load static %}
+<footer class="bg-gray-800 text-white py-10">
+    <div class="container mx-auto px-4">
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+            <!-- درباره ما -->
+            <div class="space-y-4">
+                <h3 class="text-lg font-bold flex items-center gap-2">
+                    <i class="fas fa-info-circle"></i> درباره ما
+                </h3>
+                {% if site_settings.about_us %}
+                <p class="text-gray-300 text-sm leading-relaxed">
+                        {{ site_settings.about_us }}
+                    </p>
+                {% endif %}
+            </div>
+
+            <!-- لینک‌های مفید -->
+            <div class="space-y-4">
+                <h3 class="text-lg font-bold flex items-center gap-2">
+                    <i class="fas fa-link"></i> لینک‌های مفید
+                </h3>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="/" class="text-gray-300 hover:text-blue-400 transition-colors">خانه</a></li>
+                    <li><a href="{% url 'categories' %}" class="text-gray-300 hover:text-blue-400 transition-colors">دسته‌بندی‌ها</a></li>
+                    <li><a href="{% url 'about' %}" class="text-gray-300 hover:text-blue-400 transition-colors">درباره ما</a></li>
+                    <li><a href="{% url 'contact' %}" class="text-gray-300 hover:text-blue-400 transition-colors">تماس با ما</a></li>
+                    <li><a href="{% url 'terms' %}" class="text-gray-300 hover:text-blue-400 transition-colors">قوانین</a></li>
+                </ul>
+            </div>
+
+            <!-- اطلاعات تماس -->
+            <div class="space-y-4">
+                <h3 class="text-lg font-bold flex items-center gap-2">
+                    <i class="fas fa-address-book"></i> تماس با ما
+                </h3>
+                <ul class="space-y-2 text-sm text-gray-300">
+                    {% if site_settings.address %}
+                    <li class="flex items-center gap-2">
+                        <i class="fas fa-map-marker-alt"></i> {{site_settings.address}}
+                    </li>
+                    {% endif %}
+                    {% if site_settings.phone %}
+                    <li class="flex items-center gap-2">
+                        <i class="fas fa-phone-alt"></i> <a href="tel:{{site_settings.phone}}" class="hover:text-blue-400 transition-colors">{{site_settings.phone}}</a>
+                    </li>
+                    {% endif %}
+                    {% if site_settings.email %}
+                    <li class="flex items-center gap-2">
+                        <i class="fas fa-envelope"></i> <a href="mailto:{{site_settings.email}}" class="hover:text-blue-400 transition-colors">{{site_settings.email}}</a>
+                    </li>
+                    {% endif %}
+                </ul>
+                <!-- شبکه‌های اجتماعی و اینماد -->
+                <div class="space-y-4 mt-4">
+                    <div class="flex gap-4">
+                        {% if site_settings.telegram %}
+                            <a href="{{ site_settings.telegram }}" class="text-gray-300 hover:text-blue-400 transition-colors"><i class="fab fa-telegram text-2xl"></i></a>
+                        {% endif %}
+                        {% if site_settings.instagram %}
+                            <a href="{{ site_settings.instagram }}" class="text-gray-300 hover:text-blue-400 transition-colors"><i class="fab fa-instagram text-2xl"></i></a>
+                        {% endif %}
+                    </div>
+                    <!-- اینماد -->
+                    {% if site_settings.enamad %}
+                        <div class="enamad-container">
+                            {{ site_settings.enamad|safe }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- کپی‌رایت -->
+        <div class="mt-8 pt-8 border-t border-gray-700 text-center text-sm text-gray-400">
+            <p>© {% now "Y" %} {{ site_settings.title }} | تمامی حقوق محفوظ است.</p>
+        </div>
+    </div>
+</footer>

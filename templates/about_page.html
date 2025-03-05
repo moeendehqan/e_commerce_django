@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static humanize %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12">
+    <!-- عنوان -->
+    <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-8 flex items-center justify-center gap-2">
+        <i class="fas fa-users text-blue-600"></i> درباره ما
+    </h1>
+
+    <!-- بخش درباره شرکت -->
+    <section class="bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+            <i class="fas fa-building"></i> درباره شرکت ما
+        </h2>
+        {% if site_settings.about_us_image %}
+        <div class="max-h-96 overflow-hidden">
+        <img src="{{site_settings.about_us_image.url}}" alt="about us image" class="w-full h-auto">
+        </div>
+        {% endif %}
+        {% if site_settings.about_us %}
+        <p class="text-gray-600 text-base leading-relaxed mb-4">
+        {{site_settings.about_us}}
+        </p>
+        {% endif %}
+
+    </section>
+</div>
+{% endblock %}

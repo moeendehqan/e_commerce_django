@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static humanize basket_tags %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12">
+    <!-- عنوان -->
+    <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-8 flex items-center justify-center gap-2">
+        <i class="fas fa-shopping-cart text-blue-600"></i> سبد خرید شما
+    </h1>
+
+    <!-- نمایش پیام‌ها -->
+    {% if messages %}
+        <div class="mb-6">
+            {% for message in messages %}
+                <div class="p-4 rounded-md {% if message.tags == 'success' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
+                    <i class="fas {% if message.tags == 'success' %}fa-check-circle{% else %}fa-exclamation-circle{% endif %} mr-2"></i>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- محتوای اصلی -->
+    {% if baskets %}
+        {% include 'basket/basket_list.html' with baskets=baskets %}
+        {% include 'basket/basket_totals.html' with baskets=baskets %}
+    {% else %}
+        {% include 'basket/basket_empty.html' %}
+    {% endif %}
+    <div class="mt-8">
+        <a href="{% url 'order:order_tracking' %}" class="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-colors">
+            پیگیری سفارش
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static humanize basket_tags %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12">
+    <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-8 flex items-center justify-center gap-2">
+        <i class="fas fa-check-square text-blue-600"></i> تکمیل سفارش
+    </h1>
+
+    {% if messages %}
+        <div class="mb-6">
+            {% for message in messages %}
+                <div class="p-4 rounded-md {% if message.tags == 'success' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
+                    <i class="fas {% if message.tags == 'success' %}fa-check-circle{% else %}fa-exclamation-circle{% endif %} mr-2"></i>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if baskets %}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">محتویات سبد خرید</h2>
+                <table class="w-full text-right">
+                    <thead>
+                        <tr class="border-b text-gray-700">
+                            <th class="py-2">محصول</th>
+                            <th class="py-2">تعداد</th>
+                            <th class="py-2">قیمت</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for basket in baskets %}
+                            <tr class="border-b last:border-b-0">
+                                <td class="py-2">{{ basket.variant.product.name }} - {{ basket.variant.name }}</td>
+                                <td class="py-2">{{ basket.quantity }}</td>
+                                <td class="py-2">{{ basket.quantity|multiply:basket.variant.real_price|intcomma }} تومان</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="mt-4 space-y-2 text-lg text-gray-800 text-left">
+                    <p><strong>جمع محصولات:</strong> {{ subtotal|intcomma }} تومان</p>
+                    <p><strong>هزینه ارسال:</strong> {{ shipping_cost|intcomma }} تومان</p>
+                    <p class="font-semibold"><strong>جمع کل:</strong> <span class="text-blue-600">{{ total|intcomma }} تومان</span></p>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">اطلاعات ارسال</h2>
+                <form method="post" action="{% url 'order:checkout' %}" class="space-y-4">
+                    {% csrf_token %}
+                    <div>
+                        <label for="id_address" class="block text-gray-700 font-medium mb-1">آدرس ارسال:</label>
+                        {{ form.address }}
+                        {% if form.errors.address %}
+                            <p class="text-red-600 text-sm mt-2">{{ form.errors.address }}</p>
+                        {% endif %}
+                        {% if not form.address.field.queryset.exists %}
+                            <p class="text-red-600 text-sm mt-2">
+                                شما هیچ آدرسی ثبت نکرده‌اید! برای ادامه، 
+                                <a href="{% url 'address_management' %}" class="text-blue-600 underline hover:text-blue-800">
+                                    اینجا کلیک کنید و آدرس خود را ثبت کنید
+                                </a>.
+                            </p>
+                        {% endif %}
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 {% if not form.address.field.queryset.exists %}opacity-50 cursor-not-allowed{% endif %}" {% if not form.address.field.queryset.exists %}disabled{% endif %}>
+                        <i class="fas fa-check-circle"></i> ثبت سفارش
+                    </button>
+                </form>
+            </div>
+        </div>
+    {% else %}
+        <div class="text-center py-12">
+            <i class="fas fa-shopping-cart text-gray-400 text-6xl mb-4"></i>
+            <p class="text-gray-600 text-lg">سبد خرید شما خالی است!</p>
+            <a href="{% url 'order:categories' %}" class="mt-4 inline-block bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-colors">
+                بازگشت به فروشگاه
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static humanize %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12">
+    <!-- عنوان -->
+    <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-8 flex items-center justify-center gap-2">
+        <i class="fas fa-map-marker-alt text-blue-600"></i> مدیریت آدرس‌ها
+    </h1>
+
+    {% if messages %}
+        <div class="mb-6">
+            {% for message in messages %}
+                <div class="p-4 rounded-md {% if message.tags == 'success' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
+                    <i class="fas {% if message.tags == 'success' %}fa-check-circle{% else %}fa-exclamation-circle{% endif %} mr-2"></i>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- گرید دو ستونی -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- لیست آدرس‌ها -->
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">آدرس‌های شما</h2>
+            {% if addresses %}
+                <div class="space-y-4">
+                    {% for address in addresses %}
+                        <div class="border p-4 rounded-md {% if address.is_default %}border-blue-500 bg-blue-50{% endif %}">
+                            <h3 class="text-lg font-semibold text-gray-800">{{ address.title }}</h3>
+                            <p class="text-gray-600">استان: {{ address.province }}</p>
+                            <p class="text-gray-600">شهر: {{ address.city }}</p>
+                            <p class="text-gray-600">آدرس: {{ address.full_address }}</p>
+                            <p class="text-gray-600">کد پستی: {{ address.postal_code }}</p>
+                            <p class="text-gray-600">تلفن: {{ address.phone }}</p>
+                            {% if address.is_default %}
+                                <span class="text-blue-600 text-sm"><i class="fas fa-check"></i> آدرس پیش‌فرض</span>
+                            {% endif %}
+                            <div class="mt-2 flex gap-2">
+
+                                <form method="post" action="{% url 'address_delete' address.id %}" class="inline">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="delete">
+                                    <button type="submit" class="text-red-500 hover:text-red-700">
+                                        <i class="fas fa-trash-alt"></i> حذف
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-gray-600">هنوز آدرسی ثبت نکرده‌اید!</p>
+            {% endif %}
+        </div>
+
+        <!-- فرم افزودن آدرس -->
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">افزودن آدرس جدید</h2>
+            <form method="post" action="{% url 'address_management' %}" class="space-y-4">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
+                    <i class="fas fa-plus-circle"></i> افزودن آدرس
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

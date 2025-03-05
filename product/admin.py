@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Product, Variant, VariantImage, Color, Size
+from .models import Category, Product, Variant, ProductImage, Color, Size
 
 # Register your models here.
 @admin.register(Category)
@@ -12,25 +12,28 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'description', 'image', 'meta_title', 'meta_description', 'meta_keywords', 'category', 'is_active')
+    list_display = ('name', 'slug',  'image', 'meta_title',  'meta_keywords', 'category', 'is_active')
     search_fields = ('name', 'slug', 'description', 'meta_title', 'meta_description', 'meta_keywords', 'category')
     list_filter = ('is_active', 'category')
+    readonly_fields = ('price', 'discount_percentage', 'real_price', 'created_at', 'updated_at')
     list_per_page = 10
 
 
 @admin.register(Variant)
 class VariantAdmin(admin.ModelAdmin):
-    list_display = ('product', 'name', 'price', 'is_active', 'color', 'size')
-    search_fields = ('product', 'name', 'color', 'size')
+    list_display = ('product', 'price', 'real_price', 'is_active', 'color', 'size', 'quantity')
+    list_editable = ('price', 'real_price', 'is_active', 'quantity')
+    search_fields = ('product', 'color', 'size')
     list_filter = ('is_active', 'color', 'size')
     list_per_page = 10
+    readonly_fields = ('discount_percentage', 'created_at', 'updated_at')
 
 
-@admin.register(VariantImage)
-class VariantImageAdmin(admin.ModelAdmin):
-    list_display = ('variant', 'image')
-    search_fields = ('variant', 'image')
-    list_filter = ('variant',)
+@admin.register(ProductImage)
+class ProductImageAdmin(admin.ModelAdmin):
+    list_display = ('product', 'image')
+    search_fields = ('product', 'image')
+    list_filter = ('product',)
     list_per_page = 10
 
 
