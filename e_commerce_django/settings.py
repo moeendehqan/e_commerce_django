@@ -9,7 +9,7 @@ AUTH_USER_MODEL = 'user.User'
 SECRET_KEY = 'django-insecure-l3#rjax53)!h!=q!m(y(r_=k)b(xmwvk@q3_8lo70d$j8f!6#)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG').lower() == 'true'
 
 ALLOWED_HOSTS = ['*']
 SITE_ID = 1
@@ -29,11 +29,13 @@ INSTALLED_APPS = [
     'product',
     'order',
     'core',
+    'blog',
 ]
 
 MIDDLEWARE = [
 
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -73,10 +75,15 @@ WSGI_APPLICATION = 'e_commerce_django.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('POSTGRES_DB'),
+        'USER': os.environ.get('POSTGRES_USER'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+        'HOST': os.environ.get('POSTGRES_HOST'),
+        'PORT': os.environ.get('POSTGRES_PORT'),
     }
 }
+
 
 
 # Password validation
@@ -119,8 +126,6 @@ STATICFILES_DIRS = [
 ]
 APPEND_SLASH = True
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles") 
-
-
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

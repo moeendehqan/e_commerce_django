@@ -3,5 +3,7 @@ zarinpal-py-sdk
 zeep
 aiohttp
 django-jazzmin
-
 django-ckeditor
+gunicorn
+psycopg2-binary>=2.9
+whitenoise

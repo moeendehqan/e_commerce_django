@@ -1,0 +1,11 @@
+
+services:
+  web:
+    build: .
+    container_name: ecommgarfiels_web
+    command: gunicorn e_commerce_django.wsgi:application --bind 0.0.0.0:5500
+    volumes:
+      - .:/app
+    ports:
+      - "5500:5500"
+    restart: always
