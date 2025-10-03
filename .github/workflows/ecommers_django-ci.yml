@@ -28,7 +28,7 @@ jobs:
             cd /home/deploy
 
             echo "🔹 بررسی وجود پروژه"
-            if [ ! -d "sepidshop" ]; then
+            if [ ! -d "sepidshop/.git" ]; then
               echo "❗ پروژه وجود ندارد. در حال کلون کردن..."
               git clone https://github.com/moeendehqan/e_commerce_django.git sepidshop
               echo "✅ کلون موفق بود."
