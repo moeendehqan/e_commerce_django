@@ -9,3 +9,6 @@ services:
     ports:
       - "5500:5500"
     restart: always
+    env_file:
+      - .env
+
