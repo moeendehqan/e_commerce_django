@@ -1,4 +1,4 @@
-name: Deploy ecommerece
+name: Deploy eCommerce
 
 on:
   push:
@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Deploy to server via SSH
@@ -21,15 +21,14 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: 22
           script: |
-
             cd /home/deploy
+
             if [ ! -d "sepidshop" ]; then
               git clone https://github.com/moeendehqan/e_commerce_django.git sepidshop
             fi
+
             cd sepidshop
             git pull origin main
-
-            cd /home/deploy/sepidshop
 
             echo "POSTGRES_DB=${{ secrets.POSTGRES_DB }}" > .env
             echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> .env
@@ -37,8 +36,8 @@ jobs:
             echo "POSTGRES_HOST=${{ secrets.POSTGRES_HOST }}" >> .env
             echo "POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}" >> .env
             echo "DEBUG=${{ secrets.DEBUG }}" >> .env
-            
-            git pull origin main
+
+            # اجرای Docker Compose
             docker compose down
             docker compose pull
             docker compose up -d --build
