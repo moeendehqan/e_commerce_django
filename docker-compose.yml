@@ -2,7 +2,7 @@
 services:
   web:
     build: .
-    container_name: ecommgarfiels_web
+    container_name: ecom_sepidshop
     command: gunicorn e_commerce_django.wsgi:application --bind 0.0.0.0:5500
     volumes:
       - .:/app
