@@ -50,6 +50,7 @@ jobs:
               echo "POSTGRES_HOST=${{ secrets.POSTGRES_HOST }}"
               echo "POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}"
               echo "DEBUG=${{ secrets.DEBUG }}"
+              echo "CSRF_TRUSTED_ORIGINS=${{ secrets.CSRF_TRUSTED_ORIGINS }}"
             } > .env
             echo "✅ فایل .env ساخته شد."
 
