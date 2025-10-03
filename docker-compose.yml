@@ -1,14 +1,17 @@
-
 services:
   web:
     build: .
     container_name: ecom_sepidshop
-    command: gunicorn e_commerce_django.wsgi:application --bind 0.0.0.0:5500
-    volumes:
-      - .:/app
-    ports:
-      - "5500:5500"
-    restart: always
+    command: >
+      sh -c "
+      python manage.py migrate --noinput &&
+      python manage.py collectstatic --noinput &&
+      gunicorn e_commerce_django.wsgi:application --bind 0.0.0.0:5500
+      "
     env_file:
       - .env
-
+    ports:
+      - "5500:5500"
+    volumes:
+      - .:/app
+    restart: always

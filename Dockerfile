@@ -16,8 +16,6 @@ RUN pip install -r requirements.txt
 
 COPY . /app/
 
-RUN python manage.py collectstatic --noinput
-
 EXPOSE 5500
 
 CMD ["gunicorn", "e_commerce_django.wsgi:application", "--bind", "0.0.0.0:5500"]
