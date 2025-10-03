@@ -21,6 +21,14 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: 22
           script: |
+
+            cd /home/deploy
+            if [ ! -d "sepidshop" ]; then
+              git clone https://github.com/moeendehqan/e_commerce_django.git sepidshop
+            fi
+            cd sepidshop
+            git pull origin main
+
             cd /home/deploy/sepidshop
 
             echo "POSTGRES_DB=${{ secrets.POSTGRES_DB }}" > .env
