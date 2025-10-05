@@ -1,139 +1,98 @@
 {% load static %}
-<header class="bg-white shadow-md py-4 sticky top-0 z-50">
+<header class="backdrop-blur-md bg-white/80 shadow-sm sticky top-0 z-50">
     <div class="container mx-auto px-4">
-        <div class="flex justify-between items-center">
-            <!-- منوی همبرگر برای موبایل -->
-            <button class="md:hidden text-gray-800 focus:outline-none z-50" id="mobile-menu-button" aria-label="منو">
-                <i class="fas fa-bars w-6 h-6"></i>
-            </button>
-
-            <!-- لوگو -->
-            <div class="logo flex items-center">
-                <a href="/" class="flex items-center gap-3 no-underline">
-                    <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.meta_title }}" class="h-12 w-auto">
-                    <span class="text-gray-800 font-bold text-xl">{{ site_settings.title }}</span>
-                </a>
+      <div class="flex justify-between items-center py-4">
+        
+        <!-- دکمه منوی موبایل -->
+        <button id="mobile-menu-button" 
+          class="md:hidden flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-blue-100 transition-colors"
+          aria-label="منو">
+          <i class="fas fa-bars text-gray-700 text-lg"></i>
+        </button>
+  
+        <!-- لوگو -->
+        <a href="/" class="flex items-center gap-3">
+          <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.meta_title }}" class="h-10 w-auto">
+          <span class="text-gray-900 font-bold text-lg tracking-tight">{{ site_settings.title }}</span>
+        </a>
+  
+        <!-- منوی دسکتاپ -->
+        <nav class="hidden md:flex items-center gap-6">
+          <a href="/" class="text-gray-700 font-medium hover:text-blue-600 transition-colors">خانه</a>
+          <a href="{% url 'categories' %}" class="text-gray-700 font-medium hover:text-blue-600 transition-colors">دسته‌بندی‌ها</a>
+          <a href="{% url 'about' %}" class="text-gray-700 font-medium hover:text-blue-600 transition-colors">درباره ما</a>
+          <a href="{% url 'contact' %}" class="text-gray-700 font-medium hover:text-blue-600 transition-colors">تماس با ما</a>
+        </nav>
+  
+        <!-- آیکون‌های کاربری -->
+        <div class="flex items-center gap-4">
+          {% if user.is_authenticated %}
+            <!-- سبد خرید -->
+            <a href="{% url 'order:basket' %}" class="relative flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-blue-100 transition-colors">
+              <i class="fas fa-shopping-cart text-blue-600"></i>
+              {% if basket_count > 0 %}
+                <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                  {{ basket_count }}
+                </span>
+              {% endif %}
+            </a>
+  
+            <!-- منوی کاربری -->
+            <div class="relative">
+              <button id="user-menu-button" class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-blue-100 transition-colors">
+                <i class="fas fa-user text-blue-600"></i>
+              </button>
+              <ul id="user-menu" class="absolute right-0 mt-2 bg-white shadow-lg rounded-xl w-52 py-2 hidden">
+                <li><a href="{% url 'order:order_tracking' %}" class="block px-4 py-2 text-gray-700 hover:bg-gray-50">پیگیری سفارش</a></li>
+                <li><a href="{% url 'profile' %}" class="block px-4 py-2 text-gray-700 hover:bg-gray-50">پروفایل</a></li>
+                <li><a href="{% url 'logout' %}" class="block px-4 py-2 text-gray-700 hover:bg-gray-50">خروج</a></li>
+              </ul>
             </div>
-
-            <!-- منوی اصلی (دسکتاپ) -->
-            <nav class="main-nav hidden md:flex items-center gap-6">
-                <ul class="flex list-none gap-6">
-                    <li><a href="/" class="text-gray-700 font-semibold hover:text-blue-600 transition-colors">خانه</a></li>
-                    <li><a href="{% url 'categories' %}" class="text-gray-700 font-semibold hover:text-blue-600 transition-colors">دسته‌بندی‌ها</a></li>
-                    <li><a href="{% url 'about' %}" class="text-gray-700 font-semibold hover:text-blue-600 transition-colors">درباره ما</a></li>
-                    <li><a href="{% url 'contact' %}" class="text-gray-700 font-semibold hover:text-blue-600 transition-colors">تماس با ما</a></li>
-                </ul>
-            </nav>
-
-            <!-- آیکون‌های کاربری -->
-            <div class="flex items-center gap-4">
-                {% if user.is_authenticated %}
-                    <a href="{% url 'order:basket' %}" class="relative text-blue-500 hover:text-blue-700 transition-colors">
-                        <i class="fas fa-shopping-cart text-xl mt-2"></i>
-                        {% if basket_count > 0 %}
-                            <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{{ basket_count }}</span>
-                        {% endif %}
-                    </a>
-                    <div class="relative user-dropdown">
-                        <button class="text-blue-500 hover:text-blue-700 transition-colors flex items-center gap-2">
-                            <i class="fas fa-user-circle text-2xl"></i>
-                            <span class="hidden md:inline">حساب کاربری</span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li class="border-b border-gray-100 hover:bg-gray-100 transition-colors">
-                                <a href="{% url 'order:order_tracking' %}" class="text-gray-700 hover:text-blue-700 transition-colors flex items-center gap-2 p-3">
-                                    <i class="fas fa-truck ml-2.5 text-gray-500 w-5 text-center"></i> پیگیری سفارش
-                                </a>
-                            </li>
-                            <li class="border-b border-gray-100 hover:bg-gray-100 transition-colors">
-                                <a href="{% url 'profile' %}" class="text-gray-700 hover:text-blue-700 transition-colors flex items-center gap-2 p-3">
-                                    <i class="fas fa-user-circle ml-2.5 text-gray-500 w-5 text-center"></i> پروفایل
-                                </a>
-                            </li>
-                            <li class="hover:bg-gray-100 transition-colors">
-                                <a href="{% url 'logout' %}" class="text-gray-700 hover:text-blue-700 transition-colors flex items-center gap-2 p-3">
-                                    <i class="fas fa-sign-out-alt ml-2.5 text-gray-500 w-5 text-center"></i> خروج
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                {% else %}
-                    <a href="{% url 'login' %}" class="text-blue-500 hover:text-blue-700 transition-colors">
-                        <i class="fas fa-sign-in-alt text-2xl"></i>
-                    </a>
-                {% endif %}
-            </div>
+          {% else %}
+            <a href="{% url 'login' %}" class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-blue-100 transition-colors">
+              <i class="fas fa-sign-in-alt text-blue-600"></i>
+            </a>
+          {% endif %}
         </div>
-
-        <!-- منوی موبایل -->
-        <div id="mobile-menu" class="mobile-nav fixed inset-0 bg-white transform translate-x-full transition-transform duration-300 ease-in-out md:hidden">
-            <nav class="h-full pt-20 px-6">
-                <ul class="flex flex-col list-none gap-6">
-                    <li><a href="/" class="block py-3 text-gray-800 font-semibold hover:bg-gray-100 rounded-md transition-colors">خانه</a></li>
-                    <li><a href="{% url 'categories' %}" class="block py-3 text-gray-800 font-semibold hover:bg-gray-100 rounded-md transition-colors">دسته‌بندی‌ها</a></li>
-                    <li><a href="{% url 'about' %}" class="block py-3 text-gray-800 font-semibold hover:bg-gray-100 rounded-md transition-colors">درباره ما</a></li>
-                    <li><a href="{% url 'contact' %}" class="block py-3 text-gray-800 font-semibold hover:bg-gray-100 rounded-md transition-colors">تماس با ما</a></li>
-                </ul>
-            </nav>
-        </div>
+      </div>
     </div>
-</header>
-
-<!-- جاوااسکریپت برای منوی موبایل -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
+  
+    <!-- منوی موبایل -->
+    <div id="mobile-menu" class="fixed inset-0 bg-white/95 backdrop-blur-md transform translate-x-full transition-transform duration-300 ease-in-out md:hidden">
+      <nav class="h-full pt-20 px-6">
+        <ul class="flex flex-col gap-4 text-lg">
+          <li><a href="/" class="block px-4 py-3 rounded-lg hover:bg-gray-100">خانه</a></li>
+          <li><a href="{% url 'categories' %}" class="block px-4 py-3 rounded-lg hover:bg-gray-100">دسته‌بندی‌ها</a></li>
+          <li><a href="{% url 'about' %}" class="block px-4 py-3 rounded-lg hover:bg-gray-100">درباره ما</a></li>
+          <li><a href="{% url 'contact' %}" class="block px-4 py-3 rounded-lg hover:bg-gray-100">تماس با ما</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
     const mobileMenuButton = document.getElementById('mobile-menu-button');
     const mobileMenu = document.getElementById('mobile-menu');
+    const userMenuButton = document.getElementById('user-menu-button');
+    const userMenu = document.getElementById('user-menu');
+  
     let isMenuOpen = false;
-
-    mobileMenuButton.addEventListener('click', function() {
-        isMenuOpen = !isMenuOpen;
-        if (isMenuOpen) {
-            mobileMenu.classList.remove('translate-x-full');
-            mobileMenu.classList.add('translate-x-0');
-        } else {
-            mobileMenu.classList.remove('translate-x-0');
-            mobileMenu.classList.add('translate-x-full');
-        }
+    mobileMenuButton?.addEventListener('click', () => {
+      isMenuOpen = !isMenuOpen;
+      mobileMenu.classList.toggle('translate-x-0', isMenuOpen);
+      mobileMenu.classList.toggle('translate-x-full', !isMenuOpen);
     });
-});
-</script>
-
-<style>
-    .user-dropdown {
-        position: relative;
-    }
-    
-    .dropdown-menu {
-        position: absolute;
-        display: none;
-        right: 0;
-        top: 100%;
-        margin-top: 1px;
-        background-color: white;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        border-radius: 0.375rem;
-        width: 14rem;
-        padding: 0.5rem 0;
-        z-index: 50;
-        border: 1px solid #f3f4f6;
-        overflow: hidden;
-    }
-    
-    .dropdown-menu::before {
-        content: '';
-        position: absolute;
-        top: -6px;
-        right: 20px;
-        width: 12px;
-        height: 12px;
-        background-color: white;
-        transform: rotate(45deg);
-        border-top: 1px solid #f3f4f6;
-        border-left: 1px solid #f3f4f6;
-    }
-    
-    .user-dropdown:hover .dropdown-menu {
-        display: block;
-    }
-</style>
+  
+    userMenuButton?.addEventListener('click', () => {
+      userMenu.classList.toggle('hidden');
+    });
+  
+    document.addEventListener('click', (e) => {
+      if (!userMenuButton.contains(e.target) && !userMenu.contains(e.target)) {
+        userMenu.classList.add('hidden');
+      }
+    });
+  });
+  </script>
+  
