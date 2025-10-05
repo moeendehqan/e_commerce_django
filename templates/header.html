@@ -24,31 +24,31 @@
       </a>
 
       <!-- منوی دسکتاپ -->
-      <nav class="hidden md:flex items-center gap-8">
+      <nav class="hidden md:flex items-center gap-12">
         <a
           href="/"
-          class="relative text-gray-700 font-medium transition-colors after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-blue-600 after:left-0 after:-bottom-1 after:transition-all hover:after:w-full hover:text-blue-600 {% if request.path == '/' %}text-blue-600 after:w-full{% endif %}"
+          class="relative text-gray-700 font-medium transition-colors after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-gradient-to-r after:from-blue-500 after:to-cyan-400 after:left-0 after:-bottom-1 after:transition-all hover:after:w-full hover:text-blue-600 {% if request.path == '/' %}text-blue-600 after:w-full{% endif %}"
         >
           خانه
         </a>
 
         <a
           href="{% url 'categories' %}"
-          class="relative text-gray-700 font-medium transition-colors after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-blue-600 after:left-0 after:-bottom-1 after:transition-all hover:after:w-full hover:text-blue-600 {% if request.path == '/categories/' %}text-blue-600 after:w-full{% endif %}"
+          class="relative text-gray-700 font-medium transition-colors after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-gradient-to-r after:from-blue-500 after:to-cyan-400 after:left-0 after:-bottom-1 after:transition-all hover:after:w-full hover:text-blue-600 {% if request.path == '/categories/' %}text-blue-600 after:w-full{% endif %}"
         >
           دسته‌بندی‌ها
         </a>
 
         <a
           href="{% url 'about' %}"
-          class="relative text-gray-700 font-medium transition-colors after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-blue-600 after:left-0 after:-bottom-1 after:transition-all hover:after:w-full hover:text-blue-600 {% if request.path == '/about/' %}text-blue-600 after:w-full{% endif %}"
+          class="relative text-gray-700 font-medium transition-colors after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-gradient-to-r after:from-blue-500 after:to-cyan-400 after:left-0 after:-bottom-1 after:transition-all hover:after:w-full hover:text-blue-600 {% if request.path == '/about/' %}text-blue-600 after:w-full{% endif %}"
         >
           درباره ما
         </a>
 
         <a
           href="{% url 'contact' %}"
-          class="relative text-gray-700 font-medium transition-colors after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-blue-600 after:left-0 after:-bottom-1 after:transition-all hover:after:w-full hover:text-blue-600 {% if request.path == '/contact/' %}text-blue-600 after:w-full{% endif %}"
+          class="relative text-gray-700 font-medium transition-colors after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-gradient-to-r after:from-blue-500 after:to-cyan-400 after:left-0 after:-bottom-1 after:transition-all hover:after:w-full hover:text-blue-600 {% if request.path == '/contact/' %}text-blue-600 after:w-full{% endif %}"
         >
           تماس با ما
         </a>
