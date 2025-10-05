@@ -1,22 +1,41 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="fa" dir="rtl" class="scroll-smooth">
-    {% include 'head.html' %}
+  {% include 'head.html' %}
 
-    <body class="min-h-screen bg-gray-100 flex flex-col">
-        {% include 'header.html' %}
-        
-        <main class="flex-grow">
-            {% block content %}
-            {% endblock %}
-        </main>
-        {% if site_settings.goftino_id %}
-            <script type="text/javascript">
-                !function(){var i="{{ site_settings.goftino_id }}",a=window,d=document;function g(){var g=d.createElement("script"),s="https://www.goftino.com/widget/"+i,l=localStorage.getItem("goftino_"+i);g.async=!0,g.src=l?s+"?o="+l:s;d.getElementsByTagName("head")[0].appendChild(g);}"complete"===d.readyState?g():a.attachEvent?a.attachEvent("onload",g):a.addEventListener("load",g,!1);}();
-            </script>
-          {% endif %}
-        
-        {% include 'footer.html' %}
-        
-    </body>
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      once: true, // فقط یک بار اجرا بشه
+      offset: 80, // فاصله از viewport
+    });
+  </script>
+
+  <body class="min-h-screen bg-gray-100 flex flex-col">
+    {% include 'header.html' %}
+
+    <main class="flex-grow">{% block content %} {% endblock %}</main>
+    {% if site_settings.goftino_id %}
+    <script type="text/javascript">
+      !(function () {
+        var i = "{{ site_settings.goftino_id }}",
+          a = window,
+          d = document;
+        function g() {
+          var g = d.createElement("script"),
+            s = "https://www.goftino.com/widget/" + i,
+            l = localStorage.getItem("goftino_" + i);
+          (g.async = !0), (g.src = l ? s + "?o=" + l : s);
+          d.getElementsByTagName("head")[0].appendChild(g);
+        }
+        "complete" === d.readyState
+          ? g()
+          : a.attachEvent
+          ? a.attachEvent("onload", g)
+          : a.addEventListener("load", g, !1);
+      })();
+    </script>
+    {% endif %} {% include 'footer.html' %}
+  </body>
 </html>
