@@ -1,98 +1,199 @@
 {% load static %}
 <header class="backdrop-blur-md bg-white/80 shadow-sm sticky top-0 z-50">
-    <div class="container mx-auto px-4">
-      <div class="flex justify-between items-center py-4">
-        
-        <!-- دکمه منوی موبایل -->
-        <button id="mobile-menu-button" 
-          class="md:hidden flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-blue-100 transition-colors"
-          aria-label="منو">
-          <i class="fas fa-bars text-gray-700 text-lg"></i>
-        </button>
-  
-        <!-- لوگو -->
-        <a href="/" class="flex items-center gap-3">
-          <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.meta_title }}" class="h-10 w-auto">
-          <span class="text-gray-900 font-bold text-lg tracking-tight">{{ site_settings.title }}</span>
-        </a>
-  
-        <!-- منوی دسکتاپ -->
-        <nav class="hidden md:flex items-center gap-6">
-          <a href="/" class="text-gray-700 font-medium hover:text-blue-600 transition-colors">خانه</a>
-          <a href="{% url 'categories' %}" class="text-gray-700 font-medium hover:text-blue-600 transition-colors">دسته‌بندی‌ها</a>
-          <a href="{% url 'about' %}" class="text-gray-700 font-medium hover:text-blue-600 transition-colors">درباره ما</a>
-          <a href="{% url 'contact' %}" class="text-gray-700 font-medium hover:text-blue-600 transition-colors">تماس با ما</a>
-        </nav>
-  
-        <!-- آیکون‌های کاربری -->
-        <div class="flex items-center gap-4">
-          {% if user.is_authenticated %}
-            <!-- سبد خرید -->
-            <a href="{% url 'order:basket' %}" class="relative flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-blue-100 transition-colors">
-              <i class="fas fa-shopping-cart text-blue-600"></i>
-              {% if basket_count > 0 %}
-                <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                  {{ basket_count }}
-                </span>
-              {% endif %}
-            </a>
-  
-            <!-- منوی کاربری -->
-            <div class="relative">
-              <button id="user-menu-button" class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-blue-100 transition-colors">
-                <i class="fas fa-user text-blue-600"></i>
-              </button>
-              <ul id="user-menu" class="absolute right-0 mt-2 bg-white shadow-lg rounded-xl w-52 py-2 hidden">
-                <li><a href="{% url 'order:order_tracking' %}" class="block px-4 py-2 text-gray-700 hover:bg-gray-50">پیگیری سفارش</a></li>
-                <li><a href="{% url 'profile' %}" class="block px-4 py-2 text-gray-700 hover:bg-gray-50">پروفایل</a></li>
-                <li><a href="{% url 'logout' %}" class="block px-4 py-2 text-gray-700 hover:bg-gray-50">خروج</a></li>
-              </ul>
-            </div>
-          {% else %}
-            <a href="{% url 'login' %}" class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-blue-100 transition-colors">
-              <i class="fas fa-sign-in-alt text-blue-600"></i>
-            </a>
+  <div class="container mx-auto px-4">
+    <div class="flex justify-between items-center py-4">
+      <!-- دکمه منوی موبایل -->
+      <button
+        id="mobile-menu-button"
+        class="md:hidden flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-blue-100 transition-colors"
+        aria-label="منو"
+      >
+        <i class="fas fa-bars text-gray-700 text-lg"></i>
+      </button>
+
+      <!-- لوگو -->
+      <a href="/" class="flex items-center gap-3">
+        <img
+          src="{{ site_settings.logo.url }}"
+          alt="{{ site_settings.meta_title }}"
+          class="h-10 w-auto"
+        />
+        <span class="text-gray-900 font-bold text-lg tracking-tight"
+          >{{ site_settings.title }}</span
+        >
+      </a>
+
+      <!-- منوی دسکتاپ -->
+      <nav class="hidden md:flex items-center gap-6">
+        <a
+          href="/"
+          class="text-gray-700 font-medium hover:text-blue-600 transition-colors"
+          >خانه</a
+        >
+        <a
+          href="{% url 'categories' %}"
+          class="text-gray-700 font-medium hover:text-blue-600 transition-colors"
+          >دسته‌بندی‌ها</a
+        >
+        <a
+          href="{% url 'about' %}"
+          class="text-gray-700 font-medium hover:text-blue-600 transition-colors"
+          >درباره ما</a
+        >
+        <a
+          href="{% url 'contact' %}"
+          class="text-gray-700 font-medium hover:text-blue-600 transition-colors"
+          >تماس با ما</a
+        >
+      </nav>
+
+      <!-- آیکون‌های کاربری -->
+      <div class="flex items-center gap-4">
+        {% if user.is_authenticated %}
+        <!-- سبد خرید -->
+        <a
+          href="{% url 'order:basket' %}"
+          class="relative flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-blue-100 transition-colors"
+        >
+          <i class="fas fa-shopping-cart text-blue-600"></i>
+          {% if basket_count > 0 %}
+          <span
+            class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center"
+          >
+            {{ basket_count }}
+          </span>
           {% endif %}
+        </a>
+
+        <!-- منوی کاربری -->
+        <div class="relative">
+          <button
+            id="user-menu-button"
+            class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-blue-100 transition-colors"
+          >
+            <i class="fas fa-user text-blue-600"></i>
+          </button>
+          <ul
+            id="user-menu"
+            class="absolute right-0 mt-2 bg-white shadow-lg rounded-xl w-52 py-2 hidden"
+          >
+            <li>
+              <a
+                href="{% url 'order:order_tracking' %}"
+                class="block px-4 py-2 text-gray-700 hover:bg-gray-50"
+                >پیگیری سفارش</a
+              >
+            </li>
+            <li>
+              <a
+                href="{% url 'profile' %}"
+                class="block px-4 py-2 text-gray-700 hover:bg-gray-50"
+                >پروفایل</a
+              >
+            </li>
+            <li>
+              <a
+                href="{% url 'logout' %}"
+                class="block px-4 py-2 text-gray-700 hover:bg-gray-50"
+                >خروج</a
+              >
+            </li>
+          </ul>
         </div>
+        {% else %}
+        <a
+          href="{% url 'login' %}"
+          class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-blue-100 transition-colors"
+        >
+          <i class="fas fa-sign-in-alt text-blue-600"></i>
+        </a>
+        {% endif %}
       </div>
     </div>
-  
-    <!-- منوی موبایل -->
-    <div id="mobile-menu" class="fixed inset-0 bg-white/95 backdrop-blur-md transform translate-x-full transition-transform duration-300 ease-in-out md:hidden">
-      <nav class="h-full pt-20 px-6">
+  </div>
+
+  <!-- منوی موبایل -->
+  <div id="mobile-menu" class="fixed inset-0 z-50 hidden md:hidden">
+    <!-- پس‌زمینه تار -->
+    <div
+      id="overlay"
+      class="absolute inset-0 bg-black/50 backdrop-blur-sm"
+    ></div>
+
+    <!-- محتوای منو -->
+    <div
+      class="absolute right-0 top-0 h-full w-72 bg-white shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out"
+      id="mobile-menu-panel"
+    >
+      <!-- دکمه بستن -->
+      <div class="flex justify-end p-4">
+        <button
+          id="close-mobile-menu"
+          class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 hover:bg-red-100 transition-colors"
+        >
+          <i class="fas fa-times text-gray-700"></i>
+        </button>
+      </div>
+
+      <!-- آیتم‌های منو -->
+      <nav class="px-6 mt-6">
         <ul class="flex flex-col gap-4 text-lg">
-          <li><a href="/" class="block px-4 py-3 rounded-lg hover:bg-gray-100">خانه</a></li>
-          <li><a href="{% url 'categories' %}" class="block px-4 py-3 rounded-lg hover:bg-gray-100">دسته‌بندی‌ها</a></li>
-          <li><a href="{% url 'about' %}" class="block px-4 py-3 rounded-lg hover:bg-gray-100">درباره ما</a></li>
-          <li><a href="{% url 'contact' %}" class="block px-4 py-3 rounded-lg hover:bg-gray-100">تماس با ما</a></li>
+          <li>
+            <a href="/" class="block px-4 py-3 rounded-lg hover:bg-gray-100"
+              >خانه</a
+            >
+          </li>
+          <li>
+            <a
+              href="{% url 'categories' %}"
+              class="block px-4 py-3 rounded-lg hover:bg-gray-100"
+              >دسته‌بندی‌ها</a
+            >
+          </li>
+          <li>
+            <a
+              href="{% url 'about' %}"
+              class="block px-4 py-3 rounded-lg hover:bg-gray-100"
+              >درباره ما</a
+            >
+          </li>
+          <li>
+            <a
+              href="{% url 'contact' %}"
+              class="block px-4 py-3 rounded-lg hover:bg-gray-100"
+              >تماس با ما</a
+            >
+          </li>
         </ul>
       </nav>
     </div>
-  </header>
-  
-  <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const mobileMenuButton = document.getElementById('mobile-menu-button');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const userMenuButton = document.getElementById('user-menu-button');
-    const userMenu = document.getElementById('user-menu');
-  
-    let isMenuOpen = false;
-    mobileMenuButton?.addEventListener('click', () => {
-      isMenuOpen = !isMenuOpen;
-      mobileMenu.classList.toggle('translate-x-0', isMenuOpen);
-      mobileMenu.classList.toggle('translate-x-full', !isMenuOpen);
-    });
-  
-    userMenuButton?.addEventListener('click', () => {
-      userMenu.classList.toggle('hidden');
-    });
-  
-    document.addEventListener('click', (e) => {
-      if (!userMenuButton.contains(e.target) && !userMenu.contains(e.target)) {
-        userMenu.classList.add('hidden');
-      }
-    });
+  </div>
+</header>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const mobileMenuButton = document.getElementById("mobile-menu-button");
+    const mobileMenu = document.getElementById("mobile-menu");
+    const mobileMenuPanel = document.getElementById("mobile-menu-panel");
+    const closeMobileMenu = document.getElementById("close-mobile-menu");
+    const overlay = document.getElementById("overlay");
+
+    function openMenu() {
+      mobileMenu.classList.remove("hidden");
+      setTimeout(() => {
+        mobileMenuPanel.classList.remove("translate-x-full");
+      }, 10);
+    }
+
+    function closeMenu() {
+      mobileMenuPanel.classList.add("translate-x-full");
+      setTimeout(() => {
+        mobileMenu.classList.add("hidden");
+      }, 300); // همزمان با transition
+    }
+
+    mobileMenuButton?.addEventListener("click", openMenu);
+    closeMobileMenu?.addEventListener("click", closeMenu);
+    overlay?.addEventListener("click", closeMenu);
   });
-  </script>
-  
+</script>
