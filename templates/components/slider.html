@@ -5,15 +5,17 @@
             {% for slider in sliders %}
                 <div class="slide w-full flex-shrink-0 relative">
                     {% if slider.image %}
-                        <img src="{{ slider.image.url }}" alt="{{ slider.alt }}" class="w-full h-96 object-cover rounded-lg shadow-md">
-                        {% if slider.link %}
-                            <a href="{{ slider.link }}" target="_blank"
-                               class="absolute bottom-5 left-5 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md text-sm font-semibold transition-transform transform hover:scale-105">
-                                مشاهده
-                            </a>
-                        {% endif %}
+                        <div class="relative w-full aspect-video">
+                            <img src="{{ slider.image.url }}" alt="{{ slider.alt }}" class="w-full h-full object-cover rounded-lg shadow-md">
+                            {% if slider.link %}
+                                <a href="{{ slider.link }}" target="_blank"
+                                   class="absolute bottom-5 left-5 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md text-sm font-semibold transition-transform transform hover:scale-105">
+                                    مشاهده
+                                </a>
+                            {% endif %}
+                        </div>
                     {% else %}
-                        <div class="w-full h-96 bg-gray-200 flex items-center justify-center rounded-lg">
+                        <div class="w-full aspect-video bg-gray-200 flex items-center justify-center rounded-lg">
                             <p class="text-red-500 font-medium">تصویری برای "{{ slider.alt }}" وجود ندارد!</p>
                         </div>
                     {% endif %}
@@ -48,7 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (slideCount <= 1) return;
 
-    // تنظیم عرض اسلایدر و اسلایدها
     slider.style.width = `${slideCount * 100}%`;
     slides.forEach(slide => {
         slide.style.width = `${100 / slideCount}%`;
@@ -56,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function showSlide(index) {
         currentIndex = (index + slideCount) % slideCount;
-        slider.style.transform = `translateX(${currentIndex * (100 / slideCount)}%)`; // مقدار مثبت برای RTL
+        slider.style.transform = `translateX(${currentIndex * (100 / slideCount)}%)`;
     }
 
     let autoSlide = setInterval(() => {
