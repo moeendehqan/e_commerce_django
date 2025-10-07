@@ -1,0 +1,43 @@
+{% load static %}
+<section class="w-full my-10 px-4" aria-label="دسته‌بندی‌های فروشگاه">
+    <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-4 text-center">دسته‌بندی‌ها</h2>
+
+    <div class="flex gap-4 overflow-x-auto pb-4 scrollbar-hide scroll-smooth">
+        {% for category in categories %}
+            {% if category.is_active %}
+                <a 
+                    href="{{ category.get_absolute_url }}" 
+                    title="{{ category.meta_title|default:category.name }}" 
+                    aria-label="مشاهده دسته‌بندی {{ category.name }}"
+                    class="flex flex-col items-center flex-shrink-0 group w-24 md:w-28"
+                >
+                    <div class="relative w-24 h-24 md:w-28 md:h-28 rounded-full overflow-hidden ring-2 ring-blue-500 group-hover:ring-blue-700 transition-all duration-300">
+                        {% if category.image %}
+                            <img 
+                                src="{{ category.image.url }}" 
+                                alt="{{ category.name }}" 
+                                loading="lazy"
+                                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                            >
+                        {% else %}
+                            <div class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500 text-sm">
+                                بدون تصویر
+                            </div>
+                        {% endif %}
+                    </div>
+                    <span class="mt-2 text-sm md:text-base text-gray-700 font-medium text-center truncate w-full group-hover:text-blue-600">
+                        {{ category.name }}
+                    </span>
+                </a>
+            {% endif %}
+        {% empty %}
+            <p class="text-gray-600 text-center w-full py-6">هیچ دسته‌بندی فعالی یافت نشد.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- اسکرول نرم و حذف اسکرول‌بار -->
+<style>
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+</style>

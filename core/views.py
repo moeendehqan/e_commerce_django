@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from .models import Slider, SiteSettings
 from django.http import HttpResponse
-from product.models import Product
+from product.models import Category, Product
 from product.utiles import Collection
 from django.views.generic import FormView
 from django.urls import reverse_lazy
@@ -30,7 +30,9 @@ class HomeView(TemplateView):
             context['best_sellers'] = Collection.best_sellers(home_settings.best_sellers_count)
         if home_settings.random_products:
             context['random_products'] = Collection.random_products(home_settings.random_products_count)
-
+        categories = Category.objects.filter(is_active=True)
+        if categories.exists():
+            context['categories'] = categories
         return context
     
 class AboutPage(TemplateView):

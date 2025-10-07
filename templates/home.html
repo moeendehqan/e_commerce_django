@@ -5,6 +5,10 @@
     {% include 'components/slider.html' with sliders=sliders %}
 {% endif %}
 
+{% if categories %}
+    {% include 'components/categories_bar.html' with categories=categories %}
+{% endif %}
+
 {% comment %} collections {% endcomment %}
 <div class="container mx-auto mt-10">
 
