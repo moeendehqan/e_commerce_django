@@ -158,6 +158,7 @@ class LoginView(TemplateView):
 class LogoutView(TemplateView):
     def get(self, request, *args, **kwargs):
         logout(request)
+        messages.success(request, 'با موفقیت از حساب کاربری خود خارج شدید.')
         return redirect('home')
 
 @method_decorator(login_required, name='dispatch')
