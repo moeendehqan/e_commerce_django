@@ -1,25 +1,39 @@
 {% load static %}
-<div class="relative w-full overflow-hidden rounded-lg shadow-lg">
-    <div id="slider-container" class="overflow-hidden relative w-full">
+<div class="relative w-full overflow-hidden rounded-2xl shadow-lg group" aria-label="اسلایدر تصاویر">
+    <div id="slider-container" class="relative w-full overflow-hidden">
         <div id="slider" class="flex transition-transform duration-700 ease-in-out">
             {% for slider in sliders %}
-                <div class="slide w-full flex-shrink-0 relative">
+                <figure class="slide w-full flex-shrink-0 relative aspect-video">
                     {% if slider.image %}
-                        <div class="relative w-full aspect-video">
-                            <img src="{{ slider.image.url }}" alt="{{ slider.alt }}" class="w-full h-full object-cover rounded-lg shadow-md">
-                            {% if slider.link %}
-                                <a href="{{ slider.link }}" target="_blank"
-                                   class="absolute bottom-5 left-5 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md text-sm font-semibold transition-transform transform hover:scale-105">
-                                    مشاهده
-                                </a>
-                            {% endif %}
-                        </div>
+                        <img 
+                            src="{{ slider.image.url }}" 
+                            alt="{{ slider.alt|default:'تصویر اسلایدر' }}" 
+                            title="{{ slider.alt|default:'تصویر اسلایدر' }}"
+                            class="w-full h-full object-cover rounded-2xl transition-transform duration-700 ease-in-out group-hover:scale-105"
+                            loading="lazy"
+                        >
+                        {% if slider.link %}
+                            <a 
+                                href="{{ slider.link }}" 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                aria-label="مشاهده {{ slider.alt }}"
+                                class="absolute bottom-6 left-6 bg-gradient-to-r from-blue-600 to-indigo-500 text-white px-5 py-2.5 rounded-full shadow-md text-sm font-semibold hover:from-blue-700 hover:to-indigo-600 transition-transform hover:scale-105"
+                            >
+                                مشاهده
+                            </a>
+                        {% endif %}
                     {% else %}
-                        <div class="w-full aspect-video bg-gray-200 flex items-center justify-center rounded-lg">
-                            <p class="text-red-500 font-medium">تصویری برای "{{ slider.alt }}" وجود ندارد!</p>
+                        <div class="w-full aspect-video bg-gray-100 flex items-center justify-center rounded-2xl">
+                            <p class="text-gray-500 font-medium">تصویری برای "{{ slider.alt }}" وجود ندارد!</p>
                         </div>
                     {% endif %}
-                </div>
+                    {% if slider.alt %}
+                        <figcaption class="absolute bottom-3 right-3 bg-black/40 text-white text-xs px-3 py-1.5 rounded-md backdrop-blur-md">
+                            {{ slider.alt }}
+                        </figcaption>
+                    {% endif %}
+                </figure>
             {% empty %}
                 <div class="min-w-full text-center py-12">
                     <p class="text-gray-600 font-semibold">اسلایدی برای نمایش وجود ندارد!</p>
@@ -29,20 +43,34 @@
     </div>
 
     <!-- دکمه‌های ناوبری -->
-    <button id="prev"
-        class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-900 bg-opacity-50 text-white p-3 rounded-full shadow-lg hover:bg-opacity-75 transition-transform hover:scale-110">
+    <button 
+        id="prev"
+        aria-label="اسلاید قبلی"
+        class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black/40 text-white p-3 rounded-full backdrop-blur-sm hover:bg-black/60 transition-transform hover:scale-110"
+    >
         <i class="fas fa-chevron-right text-lg"></i>
     </button>
-    <button id="next"
-        class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-900 bg-opacity-50 text-white p-3 rounded-full shadow-lg hover:bg-opacity-75 transition-transform hover:scale-110">
+    <button 
+        id="next"
+        aria-label="اسلاید بعدی"
+        class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black/40 text-white p-3 rounded-full backdrop-blur-sm hover:bg-black/60 transition-transform hover:scale-110"
+    >
         <i class="fas fa-chevron-left text-lg"></i>
     </button>
+
+    <!-- نقاط (Indicators) -->
+    <div id="indicators" class="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex gap-2">
+        {% for slider in sliders %}
+            <button class="indicator w-2.5 h-2.5 rounded-full bg-white/60 hover:bg-white transition-colors"></button>
+        {% endfor %}
+    </div>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const slider = document.getElementById('slider');
     const slides = document.querySelectorAll('.slide');
+    const indicators = document.querySelectorAll('.indicator');
     const prevButton = document.getElementById('prev');
     const nextButton = document.getElementById('next');
     let currentIndex = 0;
@@ -55,20 +83,28 @@ document.addEventListener('DOMContentLoaded', () => {
         slide.style.width = `${100 / slideCount}%`;
     });
 
+    function updateIndicators() {
+        indicators.forEach((dot, i) => {
+            dot.classList.toggle('bg-white', i === currentIndex);
+            dot.classList.toggle('bg-white/40', i !== currentIndex);
+        });
+    }
+
     function showSlide(index) {
         currentIndex = (index + slideCount) % slideCount;
         slider.style.transform = `translateX(${currentIndex * (100 / slideCount)}%)`;
+        updateIndicators();
     }
 
     let autoSlide = setInterval(() => {
         showSlide(currentIndex + 1);
-    }, 10000);
+    }, 8000);
 
     function resetAutoSlide() {
         clearInterval(autoSlide);
         autoSlide = setInterval(() => {
             showSlide(currentIndex + 1);
-        }, 10000);
+        }, 8000);
     }
 
     prevButton.addEventListener('click', () => {
@@ -80,5 +116,18 @@ document.addEventListener('DOMContentLoaded', () => {
         showSlide(currentIndex + 1);
         resetAutoSlide();
     });
+
+    indicators.forEach((dot, i) => {
+        dot.addEventListener('click', () => {
+            showSlide(i);
+            resetAutoSlide();
+        });
+    });
+
+    // توقف خودکار هنگام hover
+    slider.parentElement.addEventListener('mouseenter', () => clearInterval(autoSlide));
+    slider.parentElement.addEventListener('mouseleave', resetAutoSlide);
+
+    updateIndicators();
 });
 </script>
