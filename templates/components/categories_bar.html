@@ -1,76 +1,86 @@
 {% load static %}
-<section class="relative w-full my-[80px] px-4" aria-label="دسته‌بندی‌های فروشگاه">
-    <h2 class="text-3xl md:text-4xl font-extrabold text-center text-gray-800 mb-10">
-        دسته‌بندی‌های <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-yellow-400">محبوب</span>
-    </h2>
+<section class="relative w-full my-[80px]" aria-label="دسته‌بندی‌های فروشگاه">
+    <!-- جداکننده بالا -->
+    <div class="absolute top-0 left-0 w-full h-[60px] bg-gradient-to-b from-gray-100 to-transparent pointer-events-none"></div>
 
-    <div class="relative flex justify-center items-center">
-        <!-- دکمه چپ -->
-        <button 
-            id="cat-prev"
-            aria-label="قبلی"
-            class="hidden md:flex absolute left-0 z-10 bg-white/70 backdrop-blur-md p-4 rounded-full shadow-lg hover:bg-white transition"
-        >
-            <i class="fas fa-chevron-right text-gray-700 text-lg"></i>
-        </button>
+    <div class="relative z-10 px-4">
+        <h2 class="text-3xl md:text-4xl font-extrabold text-center text-gray-800 mb-12">
+            دسته‌بندی‌های 
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-yellow-400">
+                محبوب
+            </span>
+        </h2>
 
-        <!-- لیست دسته‌بندی‌ها -->
-        <div 
-            id="category-slider" 
-            class="flex gap-10 overflow-x-auto scroll-smooth px-12 scrollbar-hide justify-center items-center"
-        >
-            {% for category in categories %}
-                {% if category.is_active %}
-                    <a 
-                        href="{{ category.get_absolute_url }}" 
-                        title="{{ category.meta_title|default:category.name }}" 
-                        aria-label="مشاهده دسته‌بندی {{ category.name }}"
-                        class="flex flex-col items-center flex-shrink-0 group w-36 md:w-40 text-center"
-                    >
-                        <div class="relative w-36 h-36 md:w-40 md:h-40 rounded-full p-[5px] bg-gradient-to-tr from-pink-500 via-yellow-400 to-purple-500 animate-gradientMove transition-all duration-500 group-hover:scale-110">
-                            <div class="w-full h-full rounded-full bg-white p-[3px]">
-                                {% if category.image %}
-                                    <img 
-                                        src="{{ category.image.url }}" 
-                                        alt="{{ category.name }}" 
-                                        loading="lazy"
-                                        class="w-full h-full rounded-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                    >
-                                {% else %}
-                                    <div class="w-full h-full rounded-full bg-gray-200 flex items-center justify-center text-gray-500 text-sm">
-                                        بدون تصویر
-                                    </div>
-                                {% endif %}
+        <div class="relative flex justify-center items-center">
+            <!-- دکمه قبلی -->
+            <button 
+                id="cat-prev"
+                aria-label="قبلی"
+                class="hidden md:flex absolute left-0 z-10 bg-white/80 backdrop-blur-md p-4 rounded-full shadow-lg hover:bg-white transition"
+            >
+                <i class="fas fa-chevron-right text-gray-700 text-lg"></i>
+            </button>
+
+            <!-- لیست -->
+            <div 
+                id="category-slider" 
+                class="flex gap-12 overflow-x-auto scroll-smooth px-12 scrollbar-hide justify-center items-center"
+            >
+                {% for category in categories %}
+                    {% if category.is_active %}
+                        <a 
+                            href="{{ category.get_absolute_url }}" 
+                            title="{{ category.meta_title|default:category.name }}" 
+                            aria-label="مشاهده دسته‌بندی {{ category.name }}"
+                            class="flex flex-col items-center flex-shrink-0 group text-center"
+                        >
+                            <div class="relative w-36 h-36 md:w-44 md:h-44 rounded-full p-[6px] bg-gradient-to-tr from-pink-500 via-yellow-400 to-purple-500 animate-gradientMove transition-all duration-500 group-hover:scale-110">
+                                <div class="w-full h-full rounded-full bg-white overflow-hidden">
+                                    {% if category.image %}
+                                        <img 
+                                            src="{{ category.image.url }}" 
+                                            alt="{{ category.name }}" 
+                                            loading="lazy"
+                                            class="w-full h-full object-cover rounded-full transition-transform duration-500 group-hover:scale-110"
+                                        >
+                                    {% else %}
+                                        <div class="w-full h-full rounded-full bg-gray-200 flex items-center justify-center text-gray-500 text-sm">
+                                            بدون تصویر
+                                        </div>
+                                    {% endif %}
+                                </div>
                             </div>
-                        </div>
-                        <span class="mt-3 text-base md:text-lg font-semibold text-gray-700 group-hover:text-pink-600 transition-colors duration-300">
-                            <span class="inline-block bg-gradient-to-r from-pink-500 to-yellow-400 bg-clip-text text-transparent drop-shadow-sm">
+
+                            <span class="mt-4 text-lg font-semibold text-gray-700 group-hover:text-pink-600 transition-colors duration-300">
                                 {{ category.name }}
                             </span>
-                        </span>
-                    </a>
-                {% endif %}
-            {% empty %}
-                <p class="text-gray-600 text-center w-full py-6">هیچ دسته‌بندی فعالی یافت نشد.</p>
-            {% endfor %}
-        </div>
+                        </a>
+                    {% endif %}
+                {% empty %}
+                    <p class="text-gray-600 text-center w-full py-6">هیچ دسته‌بندی فعالی یافت نشد.</p>
+                {% endfor %}
+            </div>
 
-        <!-- دکمه راست -->
-        <button 
-            id="cat-next"
-            aria-label="بعدی"
-            class="hidden md:flex absolute right-0 z-10 bg-white/70 backdrop-blur-md p-4 rounded-full shadow-lg hover:bg-white transition"
-        >
-            <i class="fas fa-chevron-left text-gray-700 text-lg"></i>
-        </button>
+            <!-- دکمه بعدی -->
+            <button 
+                id="cat-next"
+                aria-label="بعدی"
+                class="hidden md:flex absolute right-0 z-10 bg-white/80 backdrop-blur-md p-4 rounded-full shadow-lg hover:bg-white transition"
+            >
+                <i class="fas fa-chevron-left text-gray-700 text-lg"></i>
+            </button>
+        </div>
     </div>
+
+    <!-- جداکننده پایین -->
+    <div class="absolute bottom-0 left-0 w-full h-[60px] bg-gradient-to-t from-gray-100 to-transparent pointer-events-none"></div>
 </section>
 
 <style>
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* انیمیشن حرکت رنگ‌ها در گرادینت */
+/* انیمیشن رنگین‌کمان */
 @keyframes gradientMove {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
@@ -79,7 +89,7 @@
 
 .animate-gradientMove {
   background-size: 200% 200%;
-  animation: gradientMove 6s ease infinite;
+  animation: gradientMove 5s ease infinite;
 }
 </style>
 
@@ -89,7 +99,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const next = document.getElementById("cat-next");
     const prev = document.getElementById("cat-prev");
 
-    // فعال کردن دکمه‌ها در دسکتاپ
     if (window.innerWidth >= 768) {
         next.classList.remove("hidden");
         prev.classList.remove("hidden");
