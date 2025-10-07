@@ -12,13 +12,23 @@
                             class="w-full h-full object-cover rounded-2xl transition-transform duration-700 ease-in-out group-hover:scale-105"
                             loading="lazy"
                         >
+
+                        <!-- تیتر (alt) به‌صورت برجسته -->
+                        {% if slider.alt %}
+                            <figcaption class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent p-8 rounded-b-2xl">
+                                <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold text-white drop-shadow-lg leading-snug">
+                                    {{ slider.alt }}
+                                </h2>
+                            </figcaption>
+                        {% endif %}
+
                         {% if slider.link %}
                             <a 
                                 href="{{ slider.link }}" 
                                 target="_blank" 
                                 rel="noopener noreferrer"
                                 aria-label="مشاهده {{ slider.alt }}"
-                                class="absolute bottom-6 left-6 bg-gradient-to-r from-blue-600 to-indigo-500 text-white px-5 py-2.5 rounded-full shadow-md text-sm font-semibold hover:from-blue-700 hover:to-indigo-600 transition-transform hover:scale-105"
+                                class="absolute bottom-8 left-8 bg-gradient-to-r from-blue-600 to-indigo-500 text-white px-6 py-2.5 rounded-full shadow-md text-sm font-semibold hover:from-blue-700 hover:to-indigo-600 transition-transform hover:scale-105"
                             >
                                 مشاهده
                             </a>
@@ -27,11 +37,6 @@
                         <div class="w-full aspect-video bg-gray-100 flex items-center justify-center rounded-2xl">
                             <p class="text-gray-500 font-medium">تصویری برای "{{ slider.alt }}" وجود ندارد!</p>
                         </div>
-                    {% endif %}
-                    {% if slider.alt %}
-                        <figcaption class="absolute bottom-3 right-3 bg-black/40 text-white text-xs px-3 py-1.5 rounded-md backdrop-blur-md">
-                            {{ slider.alt }}
-                        </figcaption>
                     {% endif %}
                 </figure>
             {% empty %}
@@ -59,7 +64,7 @@
     </button>
 
     <!-- نقاط (Indicators) -->
-    <div id="indicators" class="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex gap-2">
+    <div id="indicators" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
         {% for slider in sliders %}
             <button class="indicator w-2.5 h-2.5 rounded-full bg-white/60 hover:bg-white transition-colors"></button>
         {% endfor %}
@@ -124,7 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // توقف خودکار هنگام hover
     slider.parentElement.addEventListener('mouseenter', () => clearInterval(autoSlide));
     slider.parentElement.addEventListener('mouseleave', resetAutoSlide);
 
