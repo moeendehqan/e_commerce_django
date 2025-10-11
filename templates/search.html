@@ -1,45 +1,275 @@
 {% extends 'base.html' %}
+{% load humanize static %}
+
+{% block title %}
+  {% if query %}
+    نتایج جستجو برای "{{ query }}" - {{ site_settings.title }}
+  {% else %}
+    جستجو در محصولات - {{ site_settings.title }}
+  {% endif %}
+{% endblock %}
+
+{% block meta_description %}
+  {% if query %}
+    نتایج جستجو برای "{{ query }}" - {{ products|length }} محصول یافت شد
+  {% else %}
+    جستجو و پیدا کردن محصولات مورد نظر شما
+  {% endif %}
+{% endblock %}
+
+{% block meta_keywords %}
+  جستجو، محصولات، {{ query|default:'' }}, خرید آنلاین
+{% endblock %}
+
+{% block extra_head %}
+  {% if query %}
+    <meta property="og:title" content='نتایج جستجو برای "{{ query }}"'>
+    <meta property="og:description" content="{{ products|length }} محصول یافت شد">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content='نتایج جستجو برای "{{ query }}"'>
+    <meta name="twitter:description" content="{{ products|length }} محصول یافت شد">
+  {% endif %}
+  <link rel="canonical" href="{{ request.build_absolute_uri }}">
+{% endblock %}
 
 {% block content %}
+<!-- Breadcrumb -->
+<nav class="bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-200" aria-label="Breadcrumb">
+    <div class="container mx-auto px-4 py-3">
+        <ol class="flex items-center space-x-2 space-x-reverse text-sm">
+            <li><a href="{% url 'home' %}" class="text-blue-600 hover:text-blue-800 transition-colors">خانه</a></li>
+            <li class="text-gray-400">/</li>
+            <li class="text-gray-600 font-medium">جستجو</li>
+            {% if query %}
+            <li class="text-gray-400">/</li>
+            <li class="text-gray-600 font-medium truncate">"{{ query }}"</li>
+            {% endif %}
+        </ol>
+    </div>
+</nav>
 
-{% if query %}
-  <h1>نتایج جستجو برای "{{ query }}"</h1>
-{% endif %}
+<div class="container mx-auto px-4 py-8">
+    <!-- هدر جستجو -->
+    <div class="mb-8">
+        {% if query %}
+        <div class="text-center mb-6">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                نتایج جستجو برای 
+                <span class="text-blue-600">"{{ query }}"</span>
+            </h1>
+            <div class="flex items-center justify-center gap-4 text-sm text-gray-600">
+                <div class="flex items-center gap-1 bg-blue-50 px-3 py-1 rounded-full">
+                    <i class="fas fa-search text-blue-600"></i>
+                    <span>{{ products|length }} محصول یافت شد</span>
+                </div>
+                {% if products %}
+                <div class="flex items-center gap-1 bg-green-50 px-3 py-1 rounded-full">
+                    <i class="fas fa-check-circle text-green-600"></i>
+                    <span>موجود</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% else %}
+        <div class="text-center mb-6">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                جستجو در محصولات
+            </h1>
+            <p class="text-gray-600 text-lg">محصول مورد نظر خود را پیدا کنید</p>
+        </div>
+        {% endif %}
 
-{% if products %}
-  <ul>
-    {% for product in products %}
-      <li>
-        <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
-      </li>
-    {% endfor %}
-  </ul>
-{% else %}
-  <p>محصولی یافت نشد.</p>
-{% endif %}
+        <!-- فرم جستجو -->
+        <div class="max-w-2xl mx-auto mb-8">
+            <form method="get" action="{% url 'search' %}" class="relative">
+                <div class="relative">
+                    <input type="text" name="q" value="{{ query }}" 
+                           placeholder="جستجو در محصولات..." 
+                           class="w-full px-6 py-4 pr-14 text-lg border-2 border-gray-200 rounded-2xl focus:border-blue-500 focus:outline-none transition-colors shadow-lg">
+                    <button type="submit" 
+                            class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white p-2 rounded-xl hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-search text-lg"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- نتایج جستجو -->
+    {% if products %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {% for product in products %}
+        <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
+            <!-- تصویر محصول -->
+            <div class="relative overflow-hidden">
+                <a href="{{ product.get_absolute_url }}">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" 
+                         class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300">
+                </a>
+                {% if product.discount_percentage > 0 %}
+                <div class="absolute top-3 right-3 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
+                    {{ product.discount_percentage }}% تخفیف
+                </div>
+                {% endif %}
+                {% if product.new %}
+                <div class="absolute top-3 left-3 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
+                    جدید
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- اطلاعات محصول -->
+            <div class="p-4">
+                <h3 class="font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                    <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
+                </h3>
+                
+                <!-- قیمت -->
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="text-lg font-bold text-gray-900">
+                        {{ product.real_price|intcomma }} تومان
+                    </span>
+                    {% if product.discount_percentage > 0 %}
+                    <span class="text-sm text-gray-500 line-through">
+                        {{ product.price|intcomma }}
+                    </span>
+                    {% endif %}
+                </div>
+                
+                <!-- آمار -->
+                <div class="flex items-center justify-between text-sm text-gray-500">
+                    <div class="flex items-center gap-1">
+                        <i class="fas fa-eye"></i>
+                        <span>{{ product.count_view|intcomma }}</span>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>{{ product.count_sell|intcomma }}</span>
+                    </div>
+                    {% if product.rating %}
+                    <div class="flex items-center gap-1">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <span>{{ product.rating|floatformat:1 }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <!-- دکمه افزودن به سبد -->
+                <div class="mt-4">
+                    <a href="{{ product.get_absolute_url }}" 
+                       class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
+                        <i class="fas fa-eye"></i>
+                        <span>مشاهده محصول</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination (اگر نیاز باشد) -->
+    {% if products.has_other_pages %}
+    <div class="mt-12 flex justify-center">
+        <nav class="flex items-center space-x-2 space-x-reverse">
+            {% if products.has_previous %}
+            <a href="?q={{ query }}&page={{ products.previous_page_number }}" 
+               class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                <i class="fas fa-chevron-right"></i>
+            </a>
+            {% endif %}
+            
+            {% for num in products.paginator.page_range %}
+            {% if products.number == num %}
+            <span class="px-4 py-2 bg-blue-600 text-white rounded-lg">{{ num }}</span>
+            {% else %}
+            <a href="?q={{ query }}&page={{ num }}" 
+               class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">{{ num }}</a>
+            {% endif %}
+            {% endfor %}
+            
+            {% if products.has_next %}
+            <a href="?q={{ query }}&page={{ products.next_page_number }}" 
+               class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                <i class="fas fa-chevron-left"></i>
+            </a>
+            {% endif %}
+        </nav>
+    </div>
+    {% endif %}
+
+    {% else %}
+    <!-- حالت عدم وجود نتیجه -->
+    <div class="text-center py-16">
+        <div class="max-w-md mx-auto">
+            <div class="mb-6">
+                <i class="fas fa-search text-6xl text-gray-300 mb-4"></i>
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">
+                    {% if query %}
+                    محصولی یافت نشد
+                    {% else %}
+                    جستجو کنید
+                    {% endif %}
+                </h2>
+                <p class="text-gray-600 mb-6">
+                    {% if query %}
+                    متأسفانه محصولی با عبارت "{{ query }}" یافت نشد. لطفاً عبارت دیگری را امتحان کنید.
+                    {% else %}
+                    برای پیدا کردن محصولات، عبارت مورد نظر خود را در کادر بالا تایپ کنید.
+                    {% endif %}
+                </p>
+            </div>
+            
+            {% if query %}
+            <div class="space-y-3">
+                <h3 class="font-semibold text-gray-900">پیشنهادات:</h3>
+                <ul class="text-sm text-gray-600 space-y-1">
+                    <li>• املای کلمات را بررسی کنید</li>
+                    <li>• از کلمات کلیدی ساده‌تر استفاده کنید</li>
+                    <li>• کلمات کلیدی عمومی‌تر را امتحان کنید</li>
+                    <li>• از فیلترهای مختلف استفاده کنید</li>
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</div>
 
 <!-- ✅ Schema Markup برای صفحه جستجو -->
+{% if query and products %}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "SearchResultsPage",
-  "name": "نتایج جستجو برای {{ query }}",
+  "name": "نتایج جستجو برای {{ query|escapejs }}",
   "url": "{{ request.build_absolute_uri }}",
+  "description": "نتایج جستجو برای {{ query|escapejs }} - {{ products|length }} محصول یافت شد",
   "mainEntity": {
     "@type": "ItemList",
-    "numberOfItems": "{{ products|length }}",
+    "numberOfItems": {{ products|length }},
     "itemListElement": [
       {% for product in products %}
       {
         "@type": "Product",
         "position": {{ forloop.counter }},
         "name": "{{ product.name|escapejs }}",
-        "url": "{{ request.scheme }}://{{ request.get_host }}{{ product.get_absolute_url }}"
+        "url": "{{ request.scheme }}://{{ request.get_host }}{{ product.get_absolute_url }}",
+        "image": "{{ request.scheme }}://{{ request.get_host }}{{ product.image.url }}",
+        "description": "{{ product.description|striptags|truncatewords:20|escapejs }}",
+        "offers": {
+          "@type": "Offer",
+          "price": "{{ product.real_price }}",
+          "priceCurrency": "IRR",
+          "availability": "https://schema.org/{% if product.is_active %}InStock{% else %}OutOfStock{% endif %}"
+        }
       }{% if not forloop.last %},{% endif %}
       {% endfor %}
     ]
   }
 }
 </script>
+{% endif %}
 
 {% endblock %}
