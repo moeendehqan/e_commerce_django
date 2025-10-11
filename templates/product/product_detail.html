@@ -182,5 +182,33 @@ function selectVariant(card) {
         addButton.setAttribute('disabled', 'true');
     }
 }
+
+<script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "{{ product.title|escapejs }}",
+      "image": ["{{ product.image.url }}"],
+      "description": "{{ product.short_description|striptags|escapejs }}",
+      "sku": "{{ product.sku }}",
+      "brand": {
+        "@type": "Brand",
+        "name": "{{ product.brand.name }}"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "{{ product.rating|default:0 }}",
+        "reviewCount": "{{ product.review_count|default:0 }}"
+      },
+      "offers": {
+        "@type": "Offer",
+        "url": "{{ request.build_absolute_uri }}",
+        "priceCurrency": "IRR",
+        "price": "{{ product.price }}",
+        "availability": "https://schema.org/{% if product.in_stock %}InStock{% else %}OutOfStock{% endif %}"
+      }
+    }
+    </script>
+    
 </script>
 {% endblock %}

@@ -70,7 +70,7 @@
         "@type": "Organization",
         "name": "{{ site_settings.title }}",
         "description": "{{ site_settings.description|escapejs }}",
-        "logo": "{{ site_settings.logo.url }}",
+        "logo": "{{ request.build_absolute_uri }}{{ site_settings.logo.url }}",
         "contactPoint": {
           "@type": "ContactPoint",
           "telephone": "{{ site_settings.phone }}",
