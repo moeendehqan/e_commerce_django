@@ -48,7 +48,7 @@
             {
               "@type": "Product",
               "position": {{ forloop.counter }},
-              "name": "{{ product.title|escapejs }}",
+              "name": "{{ product.name|escapejs }}",
               "url": "{{ request.scheme }}://{{ request.get_host }}{{ product.get_absolute_url }}"
             }{% if not forloop.last %},{% endif %}
             {% endfor %}

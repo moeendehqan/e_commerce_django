@@ -61,5 +61,26 @@
     </div>
   </section>
 
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "AboutPage",
+      "url": "{{ request.build_absolute_uri }}",
+      "mainEntity": {
+        "@type": "Organization",
+        "name": "{{ site_settings.title }}",
+        "description": "{{ site_settings.description|escapejs }}",
+        "logo": "{{ site_settings.logo.url }}",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "{{ site_settings.phone }}",
+          "contactType": "customer service",
+          "areaServed": "IR",
+          "availableLanguage": ["Persian"]
+        }
+      }
+    }
+    </script>
+    
 </div>
 {% endblock %}

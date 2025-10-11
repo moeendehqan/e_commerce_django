@@ -106,7 +106,7 @@
           "@type": "Organization",
           "name": "{{ site_settings.title }}",
           "url": "{{ request.scheme }}://{{ request.get_host }}",
-          "logo": "{{ site_settings.logo.url }}",
+          "logo": "{{ request.scheme }}://{{ request.get_host }}{{ site_settings.logo.url }}",
           "sameAs": [
             {% if site_settings.instagram %}"{{ site_settings.instagram }}"{% if site_settings.telegram %},{% endif %}{% endif %}
             {% if site_settings.telegram %}"{{ site_settings.telegram }}"{% endif %}
