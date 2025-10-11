@@ -1,80 +1,121 @@
-{% extends 'base.html' %}
-{% load static humanize %}
-
-{% block content %}
+{% extends 'base.html' %} {% load static humanize %} {% block content %}
 <div class="container mx-auto px-4 py-12">
-    <!-- عنوان -->
-    <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-8 flex items-center justify-center gap-2">
-        <i class="fas fa-envelope text-blue-600"></i> تماس با ما
-    </h1>
+  <!-- عنوان -->
+  <h1
+    class="text-3xl md:text-4xl font-bold text-gray-800 mb-8 flex items-center justify-center gap-2"
+  >
+    <i class="fas fa-envelope text-blue-600"></i> تماس با ما
+  </h1>
 
-    <!-- پیام‌های موفقیت یا خطا -->
-    {% if messages %}
-        <div class="mb-6">
-            {% for message in messages %}
-                <div class="p-4 rounded-md {% if message.tags == 'success' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
-                    <i class="fas {% if message.tags == 'success' %}fa-check-circle{% else %}fa-exclamation-circle{% endif %} mr-2"></i>
-                    {{ message }}
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
-
-    <!-- گرید دو ستونی -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        
-        <!-- فرم تماس -->
-        <div class="bg-white p-6 rounded-lg shadow-md">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4">ارسال پیام</h2>
-            <form method="post" action="{% url 'contact' %}" class="space-y-4">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
-                    <i class="fas fa-paper-plane"></i> ارسال پیام
-                </button>
-            </form>
-        </div>
-
-        <!-- اطلاعات تماس -->
-        <div class="space-y-6">
-            {% if site_settings.contact_us_image %}
-            <div class="max-h-96 overflow-hidden rounded-2xl">
-            <img src="{{site_settings.contact_us_image.url}}" alt="contact us image" class="w-full h-auto">
-            </div>
-            {% endif %}
-            <h2 class="text-xl font-semibold text-gray-800 flex items-center gap-2">
-                <i class="fas fa-address-card"></i> اطلاعات تماس
-            </h2>
-            <ul class="space-y-4 text-gray-600">
-                {% if site_settings.address %}
-                <li class="flex items-center gap-3">
-                    <i class="fas fa-map-marker-alt text-blue-600"></i>
-                    {{site_settings.address}}
-                </li>
-                {% endif %}
-                {% if site_settings.phone %}
-                <li class="flex items-center gap-3">
-                    <i class="fas fa-phone-alt text-blue-600"></i>
-                    <a href="tel:{{site_settings.phone}}" class="hover:text-blue-500 transition-colors">{{site_settings.phone}}</a>
-                </li>
-                {% endif %}
-                {% if site_settings.email %}
-                <li class="flex items-center gap-3">
-                    <i class="fas fa-envelope text-blue-600"></i>
-                    <a href="mailto:{{site_settings.email}}" class="hover:text-blue-500 transition-colors">{{site_settings.email}}</a>
-                </li>
-                {% endif %}
-            </ul>
-            <!-- شبکه‌های اجتماعی -->
-            <div class="flex gap-4">
-                {% if site_settings.telegram %}
-                <a href="{{site_settings.telegram}}" class="text-gray-600 hover:text-blue-500 transition-colors"><i class="fab fa-telegram text-2xl"></i></a>
-                {% endif %}
-                {% if site_settings.instagram %}
-                <a href="{{site_settings.instagram}}" class="text-gray-600 hover:text-blue-500 transition-colors"><i class="fab fa-instagram text-2xl"></i></a>
-                {% endif %}
-            </div>
-        </div>
+  <!-- پیام‌های موفقیت یا خطا -->
+  {% if messages %}
+  <div class="mb-6">
+    {% for message in messages %}
+    <div
+      class="p-4 rounded-md {% if message.tags == 'success' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}"
+    >
+      <i
+        class="fas {% if message.tags == 'success' %}fa-check-circle{% else %}fa-exclamation-circle{% endif %} mr-2"
+      ></i>
+      {{ message }}
     </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- گرید دو ستونی -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <!-- فرم تماس -->
+    <div class="bg-white p-6 rounded-lg shadow-md">
+      <h2 class="text-xl font-semibold text-gray-800 mb-4">ارسال پیام</h2>
+      <form method="post" action="{% url 'contact' %}" class="space-y-4">
+        {% csrf_token %} {{ form.as_p }}
+        <button
+          type="submit"
+          class="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+        >
+          <i class="fas fa-paper-plane"></i> ارسال پیام
+        </button>
+      </form>
+    </div>
+
+    <!-- اطلاعات تماس -->
+    <div class="space-y-6">
+      {% if site_settings.contact_us_image %}
+      <div class="max-h-96 overflow-hidden rounded-2xl">
+        <img
+          src="{{site_settings.contact_us_image.url}}"
+          alt="contact us image"
+          class="w-full h-auto"
+        />
+      </div>
+      {% endif %}
+      <h2 class="text-xl font-semibold text-gray-800 flex items-center gap-2">
+        <i class="fas fa-address-card"></i> اطلاعات تماس
+      </h2>
+      <ul class="space-y-4 text-gray-600">
+        {% if site_settings.address %}
+        <li class="flex items-center gap-3">
+          <i class="fas fa-map-marker-alt text-blue-600"></i>
+          {{site_settings.address}}
+        </li>
+        {% endif %} {% if site_settings.phone %}
+        <li class="flex items-center gap-3">
+          <i class="fas fa-phone-alt text-blue-600"></i>
+          <a
+            href="tel:{{site_settings.phone}}"
+            class="hover:text-blue-500 transition-colors"
+            >{{site_settings.phone}}</a
+          >
+        </li>
+        {% endif %} {% if site_settings.email %}
+        <li class="flex items-center gap-3">
+          <i class="fas fa-envelope text-blue-600"></i>
+          <a
+            href="mailto:{{site_settings.email}}"
+            class="hover:text-blue-500 transition-colors"
+            >{{site_settings.email}}</a
+          >
+        </li>
+        {% endif %}
+      </ul>
+      <!-- شبکه‌های اجتماعی -->
+      <div class="flex gap-4">
+        {% if site_settings.telegram %}
+        <a
+          href="{{site_settings.telegram}}"
+          class="text-gray-600 hover:text-blue-500 transition-colors"
+          ><i class="fab fa-telegram text-2xl"></i
+        ></a>
+        {% endif %} {% if site_settings.instagram %}
+        <a
+          href="{{site_settings.instagram}}"
+          class="text-gray-600 hover:text-blue-500 transition-colors"
+          ><i class="fab fa-instagram text-2xl"></i
+        ></a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
 </div>
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "url": "{{ request.build_absolute_uri }}",
+    "mainEntity": {
+      "@type": "Organization",
+      "name": "{{ site_settings.title }}",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "{{ site_settings.phone }}",
+        "contactType": "customer support",
+        "areaServed": "IR",
+        "availableLanguage": ["Persian"]
+      }
+    }
+  }
+</script>
+
 {% endblock %}

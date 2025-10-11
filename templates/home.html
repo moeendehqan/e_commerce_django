@@ -86,6 +86,37 @@
     {% endif %}
 
 
+    <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "{{ site_settings.title }}",
+          "url": "{{ request.build_absolute_uri }}",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "{{ request.scheme }}://{{ request.get_host }}/search/?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        }
+        </script>
+        
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "name": "{{ site_settings.title }}",
+          "url": "{{ request.scheme }}://{{ request.get_host }}",
+          "logo": "{{ site_settings.logo.url }}",
+          "sameAs": [
+            {% if site_settings.instagram %}"{{ site_settings.instagram }}"{% if site_settings.telegram %},{% endif %}{% endif %}
+            {% if site_settings.telegram %}"{{ site_settings.telegram }}"{% endif %}
+          ]
+        }
+        </script>
+        
+        
+        
+
 
     
 </div>

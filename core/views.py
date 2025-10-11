@@ -113,3 +113,21 @@ class TermsView(TemplateView):
             }
         return context
 
+
+class SearchView(TemplateView):
+    template_name = 'search.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['meta_tag'] = {'meta_title': 'جستجو'}
+        return context
+
+    def get(self, request, *args, **kwargs):
+        query = request.GET.get('q', '').strip()
+        products = Product.objects.filter(name__icontains=query, is_active=True) if query else []
+        context = self.get_context_data(**kwargs)
+        context['products'] = products
+        context['query'] = query
+        return self.render_to_response(context)
+
+    

@@ -34,5 +34,27 @@
             </div>
         {% endfor %}
     </div>
+
+
+    <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          "name": "{{ category.title }}",
+          "url": "{{ request.build_absolute_uri }}",
+          "numberOfItems": "{{ products|length }}",
+          "itemListElement": [
+            {% for product in products %}
+            {
+              "@type": "Product",
+              "position": {{ forloop.counter }},
+              "name": "{{ product.title|escapejs }}",
+              "url": "{{ request.scheme }}://{{ request.get_host }}{{ product.get_absolute_url }}"
+            }{% if not forloop.last %},{% endif %}
+            {% endfor %}
+          ]
+        }
+        </script>
+        
 </div>
 {% endblock %}

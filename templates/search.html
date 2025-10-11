@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if query %}
+  <h1>نتایج جستجو برای "{{ query }}"</h1>
+{% endif %}
+
+{% if products %}
+  <ul>
+    {% for product in products %}
+      <li>
+        <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>محصولی یافت نشد.</p>
+{% endif %}
+
+<!-- ✅ Schema Markup برای صفحه جستجو -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SearchResultsPage",
+  "name": "نتایج جستجو برای {{ query }}",
+  "url": "{{ request.build_absolute_uri }}",
+  "mainEntity": {
+    "@type": "ItemList",
+    "numberOfItems": "{{ products|length }}",
+    "itemListElement": [
+      {% for product in products %}
+      {
+        "@type": "Product",
+        "position": {{ forloop.counter }},
+        "name": "{{ product.name|escapejs }}",
+        "url": "{{ request.scheme }}://{{ request.get_host }}{{ product.get_absolute_url }}"
+      }{% if not forloop.last %},{% endif %}
+      {% endfor %}
+    ]
+  }
+}
+</script>
+
+{% endblock %}
