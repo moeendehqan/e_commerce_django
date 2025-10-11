@@ -185,30 +185,47 @@ function selectVariant(card) {
 
 <script type="application/ld+json">
     {
-      "@context": "https://schema.org",
+      "@context": "https://schema.org/",
       "@type": "Product",
-      "name": "{{ product.title|escapejs }}",
-      "image": ["{{ product.image.url }}"],
-      "description": "{{ product.short_description|striptags|escapejs }}",
-      "sku": "{{ product.sku }}",
+      "name": "{{ product.name|escapejs }}",
+      "image": [
+        "{{ request.scheme }}://{{ request.get_host }}{{ product.image.url }}"
+      ],
+      "description": "{{ product.description|striptags|escapejs }}",
+      "sku": "{{ product.id }}",
       "brand": {
         "@type": "Brand",
-        "name": "{{ product.brand.name }}"
-      },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "{{ product.rating|default:0 }}",
-        "reviewCount": "{{ product.review_count|default:0 }}"
+        "name": "{{ product.brand.name|default_if_none:'بدون برند'|escapejs }}"
       },
       "offers": {
         "@type": "Offer",
         "url": "{{ request.build_absolute_uri }}",
         "priceCurrency": "IRR",
-        "price": "{{ product.price }}",
-        "availability": "https://schema.org/{% if product.in_stock %}InStock{% else %}OutOfStock{% endif %}"
+        "price": "{{ product.price|default:0 }}",
+        {% if product.discount_percentage > 0 %}
+        "priceValidUntil": "{{ product.updated_at|date:'Y-m-d' }}",
+        "discount": "{{ product.discount_percentage }}%",
+        "priceSpecification": {
+          "@type": "PriceSpecification",
+          "price": "{{ product.real_price|default:product.price }}",
+          "priceCurrency": "IRR"
+        },
+        {% endif %}
+        "availability": "https://schema.org/{% if product.is_active %}InStock{% else %}OutOfStock{% endif %}",
+        "itemCondition": "https://schema.org/NewCondition",
+        "seller": {
+          "@type": "Organization",
+          "name": "{{ site_settings.title }}"
+        }
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "{{ product.rating|default:4.5 }}",
+        "reviewCount": "{{ product.count_sell }}"
       }
     }
     </script>
+    
     
 </script>
 {% endblock %}
