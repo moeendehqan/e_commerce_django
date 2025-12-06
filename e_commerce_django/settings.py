@@ -13,24 +13,20 @@ DEBUG = os.environ.get('DEBUG','False').lower() == 'true'
 
 # فقط دامنه‌ها
 ALLOWED_HOSTS = [
-    "shopsepid.ir",
-    "www.shopsepid.ir",
     "ochr.ir",
     "www.ochr.ir",
-    "http://shopsepid.ir",
-    "http://www.shopsepid.ir",
     "http://ochr.ir",
     "http://www.ochr.ir",
-    "https://shopsepid.ir",
-    "https://www.shopsepid.ir",
     "https://ochr.ir",
     "https://www.ochr.ir",
 ]
 
 # باید scheme داشته باشد
 CSRF_TRUSTED_ORIGINS = [
-    "https://shopsepid.ir",
-    "https://www.shopsepid.ir",
+    "ochr.ir",
+    "www.ochr.ir",
+    "http://ochr.ir",
+    "http://www.ochr.ir",
     "https://ochr.ir",
     "https://www.ochr.ir",
 ]
