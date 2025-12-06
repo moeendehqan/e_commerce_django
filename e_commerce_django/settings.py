@@ -9,15 +9,11 @@ AUTH_USER_MODEL = 'user.User'
 SECRET_KEY = 'django-insecure-l3#rjax53)!h!=q!m(y(r_=k)b(xmwvk@q3_8lo70d$j8f!6#)'
 
 
-DEBUG = os.environ.get('DEBUG','False').lower() == 'true'
+DEBUG = True
 
-# فقط دامنه‌ها
 ALLOWED_HOSTS = ['*']
 
-# باید scheme داشته باشد
 CSRF_TRUSTED_ORIGINS = [
-    "ochr.ir",
-    "www.ochr.ir",
     "http://ochr.ir",
     "http://www.ochr.ir",
     "https://ochr.ir",
