@@ -11,8 +11,21 @@ SECRET_KEY = 'django-insecure-l3#rjax53)!h!=q!m(y(r_=k)b(xmwvk@q3_8lo70d$j8f!6#)
 
 DEBUG = os.environ.get('DEBUG','False').lower() == 'true'
 
-ALLOWED_HOSTS = "https://shopsepid.ir,https://www.shopsepid.ir,https://ochr.ir,https://www.ochr.ir,ochr.ir".split(",")
-CSRF_TRUSTED_ORIGINS = "https://shopsepid.ir,https://www.shopsepid.ir,https://ochr.ir,https://www.ochr.ir,ochr.ir".split(",")
+# فقط دامنه‌ها
+ALLOWED_HOSTS = [
+    "shopsepid.ir",
+    "www.shopsepid.ir",
+    "ochr.ir",
+    "www.ochr.ir",
+]
+
+# باید scheme داشته باشد
+CSRF_TRUSTED_ORIGINS = [
+    "https://shopsepid.ir",
+    "https://www.shopsepid.ir",
+    "https://ochr.ir",
+    "https://www.ochr.ir",
+]
 SITE_ID = 1
 
 INSTALLED_APPS = [
