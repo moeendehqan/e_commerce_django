@@ -12,7 +12,7 @@ SECRET_KEY = 'django-insecure-l3#rjax53)!h!=q!m(y(r_=k)b(xmwvk@q3_8lo70d$j8f!6#)
 DEBUG = os.environ.get('DEBUG','False').lower() == 'true'
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS", "https://shopsepid.ir,https://www.shopsepid.ir").split(",")
+CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS", "https://shopsepid.ir,https://www.shopsepid.ir,https://echr.ir,https://www.echr.ir").split(",")
 SITE_ID = 1
 
 INSTALLED_APPS = [
