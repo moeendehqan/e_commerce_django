@@ -5,6 +5,13 @@ from django.conf.urls.static import static
 from product.sitemaps import ProductSitemap, CategorySitemap
 from core.sitemaps import StaticSitemap
 from django.contrib.sitemaps.views import sitemap
+from django.http import HttpResponse
+
+
+def test_host(request):
+    return HttpResponse(f"HTTP_HOST: {request.get_host()}")
+
+
 sitemaps = {
     'products': ProductSitemap,
     'categories': CategorySitemap,
@@ -18,6 +25,7 @@ urlpatterns = [
     path('', include('order.urls')),
     path('', include('user.urls')),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path('test-host/', test_host, name='test_host'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
