@@ -75,10 +75,10 @@ WSGI_APPLICATION = 'e_commerce_django.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('POSTGRES_DB','sepidshop'),
-        'USER': os.environ.get('POSTGRES_USER','postgres'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD','Moeen00006168'),
-        'HOST': os.environ.get('POSTGRES_HOST','193.56.135.20'),
+        'NAME': os.environ.get('POSTGRES_DB','echr'),
+        'USER': os.environ.get('POSTGRES_USER','admin'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD','Moeen....6168'),
+        'HOST': os.environ.get('POSTGRES_HOST','193.56.135.13'),
         'PORT': os.environ.get('POSTGRES_PORT','5432'),
     }
 }
