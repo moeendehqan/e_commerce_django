@@ -25,7 +25,7 @@ jobs:
             set -e
 
             echo "🔹 ورود به مسیر سرور"
-            cd /home/deploy
+            cd /var/www/echr/
 
             echo "🔹 بررسی وجود پروژه"
             if [ ! -d "sepidshop/.git" ]; then
