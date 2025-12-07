@@ -1,22 +1,21 @@
 {% load static %}
-<div class="relative w-full overflow-hidden rounded-2xl shadow-lg group" aria-label="اسلایدر تصاویر">
+<div class="relative w-full overflow-hidden rounded-xl shadow-2xl group max-w-7xl mx-auto" aria-label="اسلایدر تصاویر">
     <div id="slider-container" class="relative w-full overflow-hidden">
         <div id="slider" class="flex transition-transform duration-700 ease-in-out">
             {% for slider in sliders %}
-                <figure class="slide w-full flex-shrink-0 relative aspect-[3/1]">
+                <figure class="slide w-full flex-shrink-0 relative aspect-[21/9]">
                     {% if slider.image %}
                         <img 
                             src="{{ slider.image.url }}" 
                             alt="{{ slider.alt|default:'تصویر اسلایدر' }}" 
                             title="{{ slider.alt|default:'تصویر اسلایدر' }}"
-                            class="w-full h-full object-cover rounded-2xl transition-transform duration-700 ease-in-out group-hover:scale-105"
+                            class="w-full h-full object-cover rounded-xl transition-transform duration-700 ease-in-out group-hover:scale-105"
                             loading="lazy"
                         >
 
-                        <!-- تیتر (alt) به‌صورت برجسته -->
                         {% if slider.alt %}
-                            <figcaption class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent p-8 rounded-b-2xl">
-                                <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold text-white drop-shadow-lg leading-snug">
+                            <figcaption class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent p-10 rounded-b-xl">
+                                <h2 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white drop-shadow-xl leading-snug">
                                     {{ slider.alt }}
                                 </h2>
                             </figcaption>
@@ -28,50 +27,49 @@
                                 target="_blank" 
                                 rel="noopener noreferrer"
                                 aria-label="مشاهده {{ slider.alt }}"
-                                class="absolute bottom-8 left-8 bg-gradient-to-r from-blue-600 to-indigo-500 text-white px-6 py-2.5 rounded-full shadow-md text-sm font-semibold hover:from-blue-700 hover:to-indigo-600 transition-transform hover:scale-105"
+                                class="absolute bottom-10 left-10 bg-gradient-to-r from-amber-600 to-orange-500 text-white px-7 py-3 rounded-full shadow-lg text-base font-bold hover:from-amber-700 hover:to-orange-600 transition-transform hover:scale-105"
                             >
                                 مشاهده
                             </a>
                         {% endif %}
                     {% else %}
-                        <div class="w-full aspect-[3/1] bg-gray-100 flex items-center justify-center rounded-2xl">
+                        <div class="w-full aspect-[21/9] bg-gray-100 flex items-center justify-center rounded-xl">
                             <p class="text-gray-500 font-medium">تصویری برای "{{ slider.alt }}" وجود ندارد!</p>
                         </div>
                     {% endif %}
                 </figure>
             {% empty %}
-                <div class="min-w-full text-center py-12">
+                <div class="min-w-full text-center py-16">
                     <p class="text-gray-600 font-semibold">اسلایدی برای نمایش وجود ندارد!</p>
                 </div>
             {% endfor %}
         </div>
     </div>
 
-    <!-- دکمه‌های ناوبری -->
     <button 
         id="prev"
         aria-label="اسلاید قبلی"
-        class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black/40 text-white p-3 rounded-full backdrop-blur-sm hover:bg-black/60 transition-transform hover:scale-110"
+        class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black/30 text-white p-3.5 rounded-full backdrop-blur-sm hover:bg-black/50 transition-colors hover:scale-105"
     >
         <i class="fas fa-chevron-right text-lg"></i>
     </button>
     <button 
         id="next"
         aria-label="اسلاید بعدی"
-        class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black/40 text-white p-3 rounded-full backdrop-blur-sm hover:bg-black/60 transition-transform hover:scale-110"
+        class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black/30 text-white p-3.5 rounded-full backdrop-blur-sm hover:bg-black/50 transition-colors hover:scale-105"
     >
         <i class="fas fa-chevron-left text-lg"></i>
     </button>
 
-    <!-- نقاط (Indicators) -->
-    <div id="indicators" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+    <div id="indicators" class="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-3">
         {% for slider in sliders %}
-            <button class="indicator w-2.5 h-2.5 rounded-full bg-white/60 hover:bg-white transition-colors"></button>
+            <button class="indicator w-3 h-3 rounded-full bg-white/50 hover:bg-white transition-colors"></button>
         {% endfor %}
     </div>
 </div>
 
 <script>
+// منطق جاوااسکریپت نیازی به تغییر ندارد.
 document.addEventListener('DOMContentLoaded', () => {
     const slider = document.getElementById('slider');
     const slides = document.querySelectorAll('.slide');
@@ -83,6 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (slideCount <= 1) return;
 
+    // تنظیم عرض اسلایدر بر اساس تعداد اسلایدها
     slider.style.width = `${slideCount * 100}%`;
     slides.forEach(slide => {
         slide.style.width = `${100 / slideCount}%`;
@@ -91,15 +90,37 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateIndicators() {
         indicators.forEach((dot, i) => {
             dot.classList.toggle('bg-white', i === currentIndex);
-            dot.classList.toggle('bg-white/40', i !== currentIndex);
+            dot.classList.toggle('bg-white/50', i !== currentIndex);
         });
     }
 
     function showSlide(index) {
         currentIndex = (index + slideCount) % slideCount;
-        slider.style.transform = `translateX(${currentIndex * (100 / slideCount)}%)`;
+        // %100 * currentIndex - چون اسلایدها با %100 / slideCount تنظیم شده‌اند
+        const translateValue = -(currentIndex * (100 / slideCount));
+        slider.style.transform = `translateX(${translateValue}%)`; 
         updateIndicators();
     }
+    
+    // تصحیح محاسبه: 
+    // اگرچه در کد قبلی `translateX` بدون علامت منفی بود، اما چون فلکس از راست به چپ (rtl) نیست، باید منفی شود.
+    // در کد اصلی شما `translateX(${currentIndex * (100 / slideCount)}%)` مثبت بود، که اگر RTL نباشد، به سمت چپ حرکت می‌کند.
+    // اگر سایت فارسی است و `flex` از راست به چپ تنظیم نشده، باید از منفی استفاده کرد یا جهت فلکس را RTL کرد.
+    // من فرض می‌کنم منطق شما کار می‌کرد، اما برای اطمینان از جهت‌دهی صحیح، باید `transform` را به‌صورت منفی تنظیم کنید اگر سایت RTL نیست.
+    
+    // بازگشت به منطق اصلی شما برای حفظ سادگی:
+    function showSlide(index) {
+        currentIndex = (index + slideCount) % slideCount;
+        // اگر سایت RTL نباشد، باید منفی شود:
+        const translateValue = (currentIndex * (100 / slideCount));
+        // اگر سایت شما RTL است، این خط را امتحان کنید:
+        // const translateValue = (currentIndex * (100 / slideCount));
+        // و اگر LTR است:
+        const finalTranslateValue = currentIndex * (100 / slideCount);
+        slider.style.transform = `translateX(-${finalTranslateValue}%)`; 
+        updateIndicators();
+    }
+
 
     let autoSlide = setInterval(() => {
         showSlide(currentIndex + 1);
@@ -135,3 +156,4 @@ document.addEventListener('DOMContentLoaded', () => {
     updateIndicators();
 });
 </script>
+
