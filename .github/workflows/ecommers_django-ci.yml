@@ -13,7 +13,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Deploy via SSH
+      - name: Deploy to server via SSH
         uses: appleboy/ssh-action@v1.1.0
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -21,29 +21,54 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: 22
           script: |
+            # توقف اجرای اسکریپت در صورت هر خطایی
             set -e
 
+            echo "🔹 ورود به مسیر سرور"
             cd /var/www/echr/
 
+            echo "🔹 بررسی وجود پروژه"
             if [ ! -d "sepidshop/.git" ]; then
+              echo "❗ پروژه وجود ندارد. در حال کلون کردن..."
               git clone https://github.com/moeendehqan/e_commerce_django.git sepidshop
+              echo "✅ کلون موفق بود."
+            else
+              echo "✅ پروژه موجود است."
             fi
 
+
+            echo "🔹 ورود به پوشه پروژه و آپدیت آخرین تغییرات"
             cd sepidshop
             git pull origin main
+            echo "✅ آپدیت git انجام شد."
 
-            # فقط اگر .env تغییر کرده باشد بازنویسی می‌شود
-            cat << EOF > .env
-POSTGRES_DB=${{ secrets.POSTGRES_DB }}
-POSTGRES_USER=${{ secrets.POSTGRES_USER }}
-POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
-POSTGRES_HOST=${{ secrets.POSTGRES_HOST }}
-POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}
-DEBUG=${{ secrets.DEBUG }}
-CSRF_TRUSTED_ORIGINS=${{ secrets.CSRF_TRUSTED_ORIGINS }}
-EOF
+            echo "🔹 ساخت فایل .env"
+            {
+              echo "POSTGRES_DB=${{ secrets.POSTGRES_DB }}"
+              echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}"
+              echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}"
+              echo "POSTGRES_HOST=${{ secrets.POSTGRES_HOST }}"
+              echo "POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}"
+              echo "DEBUG=${{ secrets.DEBUG }}"
+              echo "CSRF_TRUSTED_ORIGINS=${{ secrets.CSRF_TRUSTED_ORIGINS }}"
+            } > .env
+            echo "✅ فایل .env ساخته شد."
 
+            echo "🔹 اجرای Docker Compose: توقف کانتینرهای قبلی"
             docker compose down
-            docker compose up -d --build
+            echo "✅ کانتینرها متوقف شدند."
 
+            echo "🔹 Pull آخرین نسخه ایمیج‌ها"
+            docker compose pull
+            echo "✅ Pull ایمیج‌ها انجام شد."
+
+            echo "🔹 Build و اجرای کانتینرها"
+            docker compose up -d --build
+            echo "✅ کانتینرها با موفقیت اجرا شدند."
+
+            echo "🔹 پاکسازی Docker"
+            docker system prune -f
+            echo "✅ پاکسازی انجام شد."
+
+            echo "🔹 وضعیت کانتینرها"
             docker ps
