@@ -1,16 +1,17 @@
 from django.shortcuts import  get_object_or_404
 from django.views.generic import TemplateView
 from .models import Category, Product, Variant, ProductImage, ProductAttributeValue
-
-
+from core.utiles.meta_tag import MetaTag
+from core.models import SiteSettings
 class CategoryListView(TemplateView):
     template_name = 'product/categories.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['categories'] = Category.objects.filter(is_active=True)
-        meta_tag = {'meta_title': 'دسته بندی ها'}
-        context['meta_tag'] = meta_tag
+        context['categories'] = Category.objects.filter(is_active=True, parent=None)
+        site_settings = SiteSettings.objects.first()
+        meta_tag = MetaTag(title='دسته بندی ها', description=site_settings.meta_description, image=site_settings.logo.url)
+        context['meta_tag'] = meta_tag.full_meta_tag()
         return context
     
 class CategoryDetailView(TemplateView):
@@ -22,13 +23,8 @@ class CategoryDetailView(TemplateView):
         category = get_object_or_404(Category, slug=slug, is_active=True)
         context['category'] = category
         context['products'] = Product.objects.filter(category=context['category'], is_active=True)
-        context['meta_tag'] = {
-            'meta_title': 'دسته ' + category.meta_title,
-            'meta_description': category.meta_description,
-            'meta_keywords': category.meta_keywords,
-            'og_image': category.image.url
-
-            }
+        meta_tag = MetaTag(title= category.meta_title, description=category.meta_description, image=category.image.url)
+        context['meta_tag'] = meta_tag.full_meta_tag()
         return context
     
 class ProductDetailView(TemplateView):
@@ -45,10 +41,6 @@ class ProductDetailView(TemplateView):
         context['default_variant'] = context['variants'].filter(is_default=True).first()  # تنوع پیش‌فرض
         context['product_images'] = ProductImage.objects.filter(product=product)  # تصاویر آلبوم
         context['attributes'] = ProductAttributeValue.objects.filter(product=product)
-        context['meta_tag'] = {
-            'meta_title': 'محصول ' + product.meta_title,
-            'meta_description': product.meta_description,
-            'meta_keywords': product.meta_keywords,
-            'og_image': product.image.url
-            }
+        meta_tag = MetaTag(title= product.meta_title, description=product.meta_description, image=product.image.url)
+        context['meta_tag'] = meta_tag.full_meta_tag()
         return context

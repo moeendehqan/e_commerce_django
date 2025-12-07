@@ -4,7 +4,7 @@ from .models import Category, Product, Variant, ProductImage, Color, Size, Brand
 # Register your models here.
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'image', 'description', 'meta_title', 'meta_description', 'meta_keywords', 'is_active')
+    list_display = ('name', 'slug', 'image', 'parent', 'description', 'meta_title', 'meta_description', 'meta_keywords', 'is_active')
     search_fields = ('name', 'slug', 'description', 'meta_title', 'meta_description', 'meta_keywords')
     list_per_page = 10
 

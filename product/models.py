@@ -59,6 +59,7 @@ class Category(models.Model):
     name = models.CharField(max_length=200, verbose_name='نام دسته‌بندی')
     slug = models.SlugField(max_length=200, verbose_name='اسلاگ')
     image = models.ImageField(upload_to='media/category/', null=True, blank=True, verbose_name='تصویر')
+    parent = models.ForeignKey('self', on_delete=models.SET_NULL, related_name='children', null=True, blank=True, verbose_name='دسته‌بندی والد')
     description = models.TextField(verbose_name='توضیحات')
     meta_title = models.CharField(max_length=200, verbose_name='عنوان متا')
     meta_description = models.TextField(verbose_name='توضیحات متا')

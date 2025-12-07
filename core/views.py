@@ -12,6 +12,7 @@ from .forms import ContactForm
 from .models import HomeOption
 import os
 from django.http import FileResponse
+from core.utiles.meta_tag import MetaTag
 
 class HomeView(TemplateView):
     template_name = 'home.html'
@@ -33,6 +34,9 @@ class HomeView(TemplateView):
         categories = Category.objects.filter(is_active=True)
         if categories.exists():
             context['categories'] = categories
+        site_settings = SiteSettings.objects.first()
+        meta_tag = MetaTag(title='خانه', description=site_settings.meta_description, image=site_settings.logo.url)
+        context['meta_tag'] = meta_tag.full_meta_tag()
         return context
     
 class AboutPage(TemplateView):
@@ -40,11 +44,8 @@ class AboutPage(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         site_settings = SiteSettings.objects.first()
-        context['meta_tag'] = {
-            'meta_title': 'درباره ما',
-            'meta_description': site_settings.about_us,
-            'og_image': site_settings.about_us_image.url
-            }
+        meta_tag = MetaTag(title='درباره ما', description=site_settings.about_us, image=site_settings.about_us_image.url)
+        context['meta_tag'] = meta_tag.full_meta_tag()
         return context
 
 
@@ -96,11 +97,7 @@ class ContactView(FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         site_settings = SiteSettings.objects.first()
-        context['meta_tag'] = {
-            'meta_title': 'تماس با ما',
-            'meta_description': site_settings.contact_us,
-            'og_image': site_settings.contact_us_image.url
-            }
+        context['meta_tag'] = MetaTag(title='تماس با ما', description=site_settings.contact_us, image=site_settings.contact_us_image.url).full_meta_tag()
         return context
     
 

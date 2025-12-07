@@ -15,6 +15,7 @@ from django.contrib import messages
 from .utiles import ZarinpalConfig
 from zarinpal import ZarinPal
 from core.models import SiteSettings
+from core.utiles.meta_tag import MetaTag
 import logging
 from user.utiles import SendSms
 
@@ -27,10 +28,9 @@ class BasketView(TemplateView):
         context['baskets'] = baskets
         total = sum(basket.quantity * basket.variant.real_price for basket in baskets)        
         context['total'] = total
-        context['meta_tag'] = {
-            'meta_title': 'سبد خرید',
-            'robots':'noindex, nofollow'
-            }
+        site_settings = SiteSettings.objects.first()
+        meta_tag = MetaTag(title='سبد خرید', description=site_settings.meta_description, image=site_settings.logo.url)
+        context['meta_tag'] = meta_tag.full_meta_tag()
         return context
     @method_decorator(login_required)
     def post(self, request):
@@ -99,10 +99,9 @@ class CheckoutView(FormView):
         context['shipping_cost'] = self.SHIPPING_COST
         context['total'] = total
         context['form'] = CheckoutForm(user=self.request.user)
-        context['meta_tag'] = {
-            'meta_title': 'پرداخت',
-            'robots':'noindex, nofollow'
-            }
+        site_settings = SiteSettings.objects.first()
+        meta_tag = MetaTag(title='پرداخت', description=site_settings.meta_description, image=site_settings.logo.url, robots='noindex, nofollow')
+        context['meta_tag'] = meta_tag.full_meta_tag()
         return context
 
     def post(self, request, *args, **kwargs):
@@ -236,10 +235,9 @@ class PaymentSuccessView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['message'] = "پرداخت با موفقیت انجام شد."
-        context['meta_tag'] = {
-            'meta_title': 'پرداخت موفق',
-            'robots':'noindex, nofollow'
-            }
+        site_settings = SiteSettings.objects.first()
+        meta_tag = MetaTag(title='پرداخت موفق', description=site_settings.meta_description, image=site_settings.logo.url, robots='noindex, nofollow')
+        context['meta_tag'] = meta_tag.full_meta_tag()
         return context
 
 class PaymentFailedView(TemplateView):
@@ -247,10 +245,9 @@ class PaymentFailedView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['message'] = "پرداخت با مشکل موجود است."
-        context['meta_tag'] = {
-            'meta_title': 'پرداخت ناموفق',
-            'robots':'noindex, nofollow'
-            }
+        site_settings = SiteSettings.objects.first()
+        meta_tag = MetaTag(title='پرداخت ناموفق', description=site_settings.meta_description, image=site_settings.logo.url, robots='noindex, nofollow')
+        context['meta_tag'] = meta_tag.full_meta_tag()
         return context
 
 
@@ -258,10 +255,9 @@ class OrderTrackingView(TemplateView):
     template_name = 'order/order_tracking.html'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['meta_tag'] = {
-            'meta_title': 'پیگیری سفارش',
-            'robots':'noindex, nofollow'
-            }
+        site_settings = SiteSettings.objects.first()
+        meta_tag = MetaTag(title='پیگیری سفارش', description=site_settings.meta_description, image=site_settings.logo.url, robots='noindex, nofollow')
+        context['meta_tag'] = meta_tag.full_meta_tag()
         orders = Order.objects.filter(user=self.request.user)
         context['orders'] = orders
         return context
