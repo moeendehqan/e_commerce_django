@@ -166,3 +166,24 @@ class Zarinpal(models.Model):
     class Meta:
         verbose_name = 'تنظیمات زرین پال'
         verbose_name_plural = 'تنظیمات زرین پال'
+
+
+class Theme(models.Model):
+    CHOICES_SLIDER = [
+        ('normal', ' معمولی'),
+    ]
+    slider = models.CharField(max_length=255, choices=CHOICES_SLIDER, default='normal', verbose_name='تم اسلایدر')
+    class Meta:
+        verbose_name = 'تم'
+        verbose_name_plural = 'تم ها'
+    def save(self, *args, **kwargs):
+        self.pk = 1
+        super().save(*args, **kwargs)
+    @classmethod
+    def get_instance(cls):
+        obj, created = cls.objects.get_or_create(pk=1)
+        return obj
+    def __str__(self):
+        return 'تم'
+
+

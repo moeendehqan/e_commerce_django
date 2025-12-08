@@ -44,7 +44,7 @@ jobs:
 
             echo "🔹 ساخت فایل .env"
             cat > .env << 'EOF'
-            ${{ secrets.ENV_ECHR }}
+            ${{ secrets.ENV_OCHR }}
             EOF
             echo "✅ فایل .env ساخته شد."
 
