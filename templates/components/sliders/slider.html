@@ -3,7 +3,7 @@
     <div id="slider-container" class="relative w-full overflow-hidden">
         <div id="slider" class="flex transition-transform duration-700 ease-in-out">
             {% for slider in sliders %}
-                <figure class="slide w-full flex-shrink-0 relative aspect-[21/9]">
+                <figure class="slide min-w-full flex-shrink-0 relative aspect-[21/9]">
                     {% if slider.image %}
                         <img 
                             src="{{ slider.image.url }}" 
@@ -80,11 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (slideCount <= 1) return;
 
-    // تنظیم عرض اسلایدر بر اساس تعداد اسلایدها
-    slider.style.width = `${slideCount * 100}%`;
-    slides.forEach(slide => {
-        slide.style.width = `${100 / slideCount}%`;
-    });
+
 
     function updateIndicators() {
         indicators.forEach((dot, i) => {
@@ -98,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function showSlide(index) {
         currentIndex = (index + slideCount) % slideCount;
-        const translateValue = currentIndex * (100 / slideCount);
+        const translateValue = currentIndex * 100;
         slider.style.transform = `translateX(-${translateValue}%)`;
         updateIndicators();
     }
