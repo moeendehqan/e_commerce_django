@@ -168,30 +168,6 @@ class Zarinpal(models.Model):
         verbose_name_plural = 'تنظیمات زرین پال'
 
 
-class Theme(models.Model):
-    CHOICES_SLIDER = [
-        ('normal', ' معمولی'),
-    ]
-    slider = models.CharField(max_length=255, choices=CHOICES_SLIDER, default='normal', verbose_name='تم اسلایدر')
-    CHOICES_CATEGORIES_PAGE= [
-        ('classic', ' کلاسیک'),
-        ('vertical', ' عمودی'),
-    ]
-    categories_page = models.CharField(max_length=255, choices=CHOICES_CATEGORIES_PAGE, default='classic', verbose_name='تم صفحه دسته بندی')
-    class Meta:
-        verbose_name = 'تم'
-        verbose_name_plural = 'تم ها'
-    def save(self, *args, **kwargs):
-        self.pk = 1
-        super().save(*args, **kwargs)
-    @classmethod
-    def get_instance(cls):
-        obj, created = cls.objects.get_or_create(pk=1)
-        return obj
-    def __str__(self):
-        return 'تم'
-
-
 
 class CategorySetting(models.Model):
     title_categories_page = models.CharField(max_length=255, default='دسته بندی', verbose_name='عنوان صفحه دسته بندی')

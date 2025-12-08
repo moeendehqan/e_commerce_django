@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.shortcuts import redirect
 from django.urls import reverse
-from .models import Slider, SiteSettings, HomeOption, SmsSetting, Zarinpal, Theme
+from .models import Slider, SiteSettings, HomeOption, SmsSetting, Zarinpal, CategorySetting
 
 class SingletonAdmin(admin.ModelAdmin):
     singleton_pk = 1
