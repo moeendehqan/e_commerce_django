@@ -3,7 +3,7 @@
     <div id="slider-container" class="relative w-full overflow-hidden">
         <div id="slider" class="flex transition-transform duration-700 ease-in-out">
             {% for slider in sliders %}
-                <figure class="slide min-w-full flex-shrink-0 relative aspect-[21/9]">
+                <figure class="slide w-full flex-shrink-0 relative aspect-[21/9]">
                     {% if slider.image %}
                         <img 
                             src="{{ slider.image.url }}" 
@@ -80,6 +80,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (slideCount <= 1) return;
 
+    slider.style.width = `${slideCount * 100}%`;
+    slides.forEach(slide => {
+        slide.style.width = `${100 / slideCount}%`;
+    });
+
 
 
     function updateIndicators() {
@@ -94,8 +99,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function showSlide(index) {
         currentIndex = (index + slideCount) % slideCount;
-        const translateValue = currentIndex * 100;
-        slider.style.transform = `translateX(-${translateValue}%)`;
+        const translateValue = currentIndex * (100 / slideCount);
+        const isRTL = getComputedStyle(document.documentElement).direction === 'rtl';
+        slider.style.transform = isRTL
+            ? `translateX(${translateValue}%)`
+            : `translateX(-${translateValue}%)`;
         updateIndicators();
     }
 
