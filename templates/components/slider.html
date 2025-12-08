@@ -105,23 +105,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     let autoSlide = setInterval(() => {
-        showSlide(currentIndex - 1);
+        showSlide(currentIndex + 1);
     }, 8000);
 
     function resetAutoSlide() {
         clearInterval(autoSlide);
         autoSlide = setInterval(() => {
-            showSlide(currentIndex - 1);
+            showSlide(currentIndex + 1);
         }, 8000);
     }
 
     prevButton.addEventListener('click', () => {
-        showSlide(currentIndex + 1);
+        showSlide(currentIndex - 1);
         resetAutoSlide();
     });
 
     nextButton.addEventListener('click', () => {
-        showSlide(currentIndex - 1);
+        showSlide(currentIndex + 1);
         resetAutoSlide();
     });
 
