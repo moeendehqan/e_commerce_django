@@ -43,15 +43,9 @@ jobs:
             echo "✅ آپدیت git انجام شد."
 
             echo "🔹 ساخت فایل .env"
-            {
-              echo "POSTGRES_DB=${{ secrets.POSTGRES_DB }}"
-              echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}"
-              echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}"
-              echo "POSTGRES_HOST=${{ secrets.POSTGRES_HOST }}"
-              echo "POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}"
-              echo "DEBUG=${{ secrets.DEBUG }}"
-              echo "CSRF_TRUSTED_ORIGINS=${{ secrets.CSRF_TRUSTED_ORIGINS }}"
-            } > .env
+            cat > .env << 'EOF'
+            ${{ secrets.ENV_ECHR }}
+            EOF
             echo "✅ فایل .env ساخته شد."
 
             echo "🔹 اجرای Docker Compose: توقف کانتینرهای قبلی"

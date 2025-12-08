@@ -1,5 +1,8 @@
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+load_dotenv()
+
 AUTH_USER_MODEL = 'user.User'
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -9,16 +12,12 @@ AUTH_USER_MODEL = 'user.User'
 SECRET_KEY = 'django-insecure-l3#rjax53)!h!=q!m(y(r_=k)b(xmwvk@q3_8lo70d$j8f!6#)'
 
 
-DEBUG = True
+DEBUG = os.environ.get('DEBUG','False').lower() == 'true'
 
 ALLOWED_HOSTS = ['*']
 
-CSRF_TRUSTED_ORIGINS = [
-    "http://ochr.ir",
-    "http://www.ochr.ir",
-    "https://ochr.ir",
-    "https://www.ochr.ir",
-]
+raw = os.environ.get('CSRF_TRUSTED_ORIGINS', '')
+CSRF_TRUSTED_ORIGINS = [origin for origin in raw.split(',') if origin]
 SITE_ID = 1
 
 INSTALLED_APPS = [
@@ -81,11 +80,11 @@ WSGI_APPLICATION = 'e_commerce_django.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('POSTGRES_DB','echr'),
-        'USER': os.environ.get('POSTGRES_USER','admin'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD','Moeen....6168'),
-        'HOST': os.environ.get('POSTGRES_HOST','193.56.135.13'),
-        'PORT': os.environ.get('POSTGRES_PORT','5432'),
+        'NAME': os.environ.get('POSTGRES_DB'),
+        'USER': os.environ.get('POSTGRES_USER'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+        'HOST': os.environ.get('POSTGRES_HOST'),
+        'PORT': os.environ.get('POSTGRES_PORT'),
     }
 }
 
