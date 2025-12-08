@@ -37,7 +37,7 @@ class MetaTag:
 
     def full_meta_tag(self):
         return {
-            "meta_title": self.title,
+            "meta_title": self.meta_title,
             "meta_description": self.description,
             "meta_keywords": self.keywords,
             "og_image": self.image,

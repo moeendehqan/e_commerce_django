@@ -32,7 +32,7 @@ class HomeView(TemplateView):
             context['best_sellers'] = Collection.best_sellers(home_settings.best_sellers_count)
         if home_settings.random_products:
             context['random_products'] = Collection.random_products(home_settings.random_products_count)
-        categories = Category.objects.filter(is_active=True)
+        categories = Category.objects.filter(is_active=True, parent__isnull=True)
         category_setting = CategorySetting.get_instance()
         if categories.exists() and category_setting.theme_categories_home!= 'None':
             context['categories'] = categories
