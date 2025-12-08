@@ -9,19 +9,21 @@ from core.models import CategorySetting
 
 class CategoryListView(TemplateView):
     template_name = 'categories/categories_classic.html'
+    setting = CategorySetting.get_instance()
 
     def get_template_names(self):
-        theme = CategorySetting.get_instance()
         templates = {
             'classic': 'categories/categories_classic.html',
             'vertical': 'categories/categories_vertical.html',
         }
-        return [templates.get(theme.categories_page, templates['classic'])]
+        return [templates.get(self.setting.theme_categories_page, templates['classic'])]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
         context['categories'] = Category.objects.filter(is_active=True, parent=None)
         site_settings = SiteSettings.objects.first()
+        context['title'] = self.setting.theme_categories_title or 'دسته بندی ها'
         meta_tag = MetaTag(title='دسته بندی ها', description=site_settings.meta_description, image=site_settings.logo.url)
         context['meta_tag'] = meta_tag.full_meta_tag()
         return context
