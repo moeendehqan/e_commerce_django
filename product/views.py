@@ -3,7 +3,7 @@ from django.views.generic import TemplateView
 from .models import Category, Product, Variant, ProductImage, ProductAttributeValue
 from core.utiles.meta_tag import MetaTag
 from core.models import SiteSettings
-from core.models import Theme
+from core.models import CategorySetting
 
 
 
@@ -11,7 +11,7 @@ class CategoryListView(TemplateView):
     template_name = 'categories/categories_classic.html'
 
     def get_template_names(self):
-        theme = Theme.get_instance()
+        theme = CategorySetting.get_instance()
         templates = {
             'classic': 'categories/categories_classic.html',
             'vertical': 'categories/categories_vertical.html',
@@ -34,6 +34,7 @@ class CategoryDetailView(TemplateView):
         slug = self.kwargs.get('slug')
         category = get_object_or_404(Category, slug=slug, is_active=True)
         context['category'] = category
+        context['subcategories'] = Category.objects.filter(is_active=True, parent=context['category'])
         context['products'] = Product.objects.filter(category=context['category'], is_active=True)
         meta_tag = MetaTag(title= category.meta_title, description=category.meta_description, image=category.image.url)
         context['meta_tag'] = meta_tag.full_meta_tag()

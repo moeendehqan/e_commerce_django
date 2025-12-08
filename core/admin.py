@@ -131,20 +131,19 @@ class ZarinpalAdmin(admin.ModelAdmin):
         return Zarinpal.objects.filter(pk=1)
 
 
-@admin.register(Theme)
-class ThemeAdmin(SingletonAdmin):
+@admin.register(CategorySetting)
+class CategorySettingAdmin(SingletonAdmin):
     fieldsets = (
         (None, {
-            'fields': ('slider', 'categories_page'),
+            'fields': ('title_categories_page', 'theme_categories_page'),
             'description': (
                 '<p class="text-blue-600 font-bold">راهنما:</p>'
-                '<p>در این بخش می‌توانید تم اسلایدر و صفحه دسته‌بندی را تنظیم کنید.</p>'
+                '<p>در این بخش می‌توانید دسته‌بندی را تنظیم کنید.</p>'
             ),
         }),
     )
     radio_fields = {
-        'slider': admin.HORIZONTAL,
-        'categories_page': admin.HORIZONTAL,
+        'theme_categories_page': admin.HORIZONTAL,
     }
     def get_queryset(self, request):
         return Theme.objects.filter(pk=1)
