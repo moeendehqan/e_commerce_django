@@ -23,7 +23,7 @@ class CategoryListView(TemplateView):
 
         context['categories'] = Category.objects.filter(is_active=True, parent=None)
         site_settings = SiteSettings.objects.first()
-        context['title'] = self.setting.theme_categories_title or 'دسته بندی ها'
+        context['title'] = self.setting.title_categories_page or 'دسته بندی ها'
         meta_tag = MetaTag(title='دسته بندی ها', description=site_settings.meta_description, image=site_settings.logo.url)
         context['meta_tag'] = meta_tag.full_meta_tag()
         return context
