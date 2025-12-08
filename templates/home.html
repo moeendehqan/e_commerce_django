@@ -18,7 +18,7 @@
 {% endif %}
 
 {% if categories %}
-    {% include 'components/categories_bar.html' with categories=categories %}
+    {% include 'categories/categories_bar_{{ theme_categories_home }}.html' with categories=categories %}
 {% endif %}
 
 {% comment %} collections {% endcomment %}

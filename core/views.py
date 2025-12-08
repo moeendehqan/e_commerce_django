@@ -10,6 +10,7 @@ from django.contrib import messages
 from .models import ContactMessage
 from .forms import ContactForm 
 from .models import HomeOption
+from .models import CategorySetting
 import os
 from django.http import FileResponse
 from core.utiles.meta_tag import MetaTag
@@ -32,8 +33,10 @@ class HomeView(TemplateView):
         if home_settings.random_products:
             context['random_products'] = Collection.random_products(home_settings.random_products_count)
         categories = Category.objects.filter(is_active=True)
-        if categories.exists():
+        category_setting = CategorySetting.get_instance()
+        if categories.exists() and category_setting.theme_categories_home!= 'None':
             context['categories'] = categories
+            context['theme_categories_home'] = category_setting.theme_categories_home or 'story'
         site_settings = SiteSettings.objects.first()
         meta_tag = MetaTag(title='خانه', description=site_settings.meta_description, image=site_settings.logo.url)
         context['meta_tag'] = meta_tag.full_meta_tag()

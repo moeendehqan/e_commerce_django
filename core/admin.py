@@ -144,6 +144,7 @@ class CategorySettingAdmin(SingletonAdmin):
     )
     radio_fields = {
         'theme_categories_page': admin.HORIZONTAL,
+        'theme_categories_home': admin.HORIZONTAL,
     }
     def get_queryset(self, request):
         return CategorySetting.objects.filter(pk=1)
