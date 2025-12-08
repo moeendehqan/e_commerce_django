@@ -118,3 +118,18 @@ class ZarinpalAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         return Zarinpal.objects.filter(pk=1)
+
+
+@admin.register(Theme)
+class ThemeAdmin(admin.ModelAdmin):
+    fieldsets = (
+            (None, {
+                'fields': (
+                    'slider',
+                ),
+                'description': (
+                    '<p class="text-blue-600 font-bold">راهنما:</p>'
+                    '<p>در این بخش می‌توانید تم اسلایدر را ویرایش کنید.</p>'
+                ),
+            }),
+        )
