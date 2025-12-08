@@ -3,8 +3,11 @@ from django.views.generic import TemplateView
 from .models import Category, Product, Variant, ProductImage, ProductAttributeValue
 from core.utiles.meta_tag import MetaTag
 from core.models import SiteSettings
+
+
+
 class CategoryListView(TemplateView):
-    template_name = 'categories/categories.html'
+    template_name = 'categories/categories_classic.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

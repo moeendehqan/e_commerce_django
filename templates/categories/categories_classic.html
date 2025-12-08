@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="gap-2 text-3xl md:text-4xl font-bold text-center text-gray-800 mb-8 flex items-center justify-center">
+        <i class="fa-solid fa-layer-group text-blue-600"></i>
+        دسته‌بندی‌های فروشگاه
+    </h1>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {% for category in categories %}
+            {% include 'categories/category_cart_classic.html' with category=category %}
+        {% empty %}
+            <div class="col-span-full text-center text-gray-500 py-10">
+                <i class="fas fa-exclamation-circle text-2xl mb-2"></i>
+                <p>دسته‌بندی‌ای یافت نشد!</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+

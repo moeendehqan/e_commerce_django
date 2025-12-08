@@ -6,9 +6,9 @@
         <i class="fa-solid fa-layer-group text-blue-600"></i>
         دسته‌بندی‌های فروشگاه
     </h1>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 gap-6">
         {% for category in categories %}
-            {% include 'categories/category_cart.html' with category=category %}
+            {% include 'categories/category_cart_vertical.html' with category=category %}
         {% empty %}
             <div class="col-span-full text-center text-gray-500 py-10">
                 <i class="fas fa-exclamation-circle text-2xl mb-2"></i>

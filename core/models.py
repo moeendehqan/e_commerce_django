@@ -173,6 +173,11 @@ class Theme(models.Model):
         ('normal', ' معمولی'),
     ]
     slider = models.CharField(max_length=255, choices=CHOICES_SLIDER, default='normal', verbose_name='تم اسلایدر')
+    CHOICES_CATEGORIES_PAGE= [
+        ('classic', ' کلاسیک'),
+        ('vertical', ' عمودی'),
+    ]
+    categories_page = models.CharField(max_length=255, choices=CHOICES_CATEGORIES_PAGE, default='classic', verbose_name='تم صفحه دسته بندی')
     class Meta:
         verbose_name = 'تم'
         verbose_name_plural = 'تم ها'

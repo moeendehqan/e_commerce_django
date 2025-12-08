@@ -133,4 +133,14 @@ class ThemeAdmin(admin.ModelAdmin):
                     '<p>در این بخش می‌توانید تم اسلایدر را ویرایش کنید.</p>'
                 ),
             }),
+            (None, {
+                'fields': (
+                    'categories_page',
+                ),
+                'description': (
+                    '<p class="text-blue-600 font-bold">راهنما:</p>'
+                    '<p>در این بخش می‌توانید تم صفحه دسته بندی را ویرایش کنید.</p>'
+                ),
+            }),
+
         )
