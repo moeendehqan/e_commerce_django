@@ -135,7 +135,7 @@ class ZarinpalAdmin(admin.ModelAdmin):
 class CategorySettingAdmin(SingletonAdmin):
     fieldsets = (
         (None, {
-            'fields': ('title_categories_page', 'theme_categories_page'),
+            'fields': ('title_categories_page', 'theme_categories_page', 'theme_categories_home'),
             'description': (
                 '<p class="text-blue-600 font-bold">راهنما:</p>'
                 '<p>در این بخش می‌توانید دسته‌بندی را تنظیم کنید.</p>'

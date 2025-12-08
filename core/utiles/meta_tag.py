@@ -14,9 +14,9 @@ class MetaTag:
         site = SiteSettings.get_instance()
 
         # Safe defaults
-        self.base_title = site.meta_title or site.title or ""
+        self.base_title = site.title or ""
         self.page_title = title or ""
-        self.title = f"{self.base_title} | {self.page_title}" if self.page_title else self.base_title
+        self.meta_title = f"{self.base_title} | {self.page_title}" if self.page_title else self.meta_title
 
         # Safe logo handling
         try:
@@ -37,8 +37,8 @@ class MetaTag:
 
     def full_meta_tag(self):
         return {
-            "title": self.title,
-            "description": self.description,
-            "keywords": self.keywords,
+            "meta_title": self.title,
+            "meta_description": self.description,
+            "meta_keywords": self.keywords,
             "og_image": self.image,
         }
