@@ -1,9 +1,19 @@
 from django.contrib import admin
-from .models import Slider, SiteSettings, HomeOption, SmsSetting, Zarinpal
-from django.contrib import admin
 from django.shortcuts import redirect
 from django.urls import reverse
-from .models import Theme
+from .models import Slider, SiteSettings, HomeOption, SmsSetting, Zarinpal, Theme
+
+class SingletonAdmin(admin.ModelAdmin):
+    singleton_pk = 1
+    def changelist_view(self, request, extra_context=None):
+        self.model.get_instance()
+        return redirect(reverse('admin:%s_%s_change' % (self.model._meta.app_label, self.model._meta.model_name), args=(self.singleton_pk,)))
+    def has_add_permission(self, request):
+        return not self.model.objects.exists()
+    def has_delete_permission(self, request, obj=None):
+        return False
+    def get_queryset(self, request):
+        return self.model.objects.filter(pk=self.singleton_pk)
 
 @admin.register(Slider)
 class SliderAdmin(admin.ModelAdmin):
