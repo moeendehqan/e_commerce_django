@@ -66,6 +66,13 @@ class SiteSettings(models.Model):
         verbose_name="شناسه گفتینو",
         help_text="شناسه گفتینو رو اینجا وارد کنید (مثل 1234567890)"
     )
+    google_tag_manager_id = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name="شناسه ردیابی Google Tag Manager",
+        help_text="شناسه ردیابی Google Tag Manager رو اینجا وارد کنید (مثل GTM-TDLFKPTP)"
+    )
     def __str__(self):
         return self.meta_title
     def save(self, *args, **kwargs):

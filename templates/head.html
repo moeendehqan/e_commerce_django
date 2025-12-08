@@ -3,17 +3,48 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>{{ meta_tag.meta_title|default:site_settings.meta_title }}</title>
-  <meta name="description" content="{{ meta_tag.meta_description|default:site_settings.meta_description }}" />
-  <meta name="keywords" content="{{ meta_tag.meta_keywords|default:site_settings.meta_keywords }}" />
+  <meta
+    name="description"
+    content="{{ meta_tag.meta_description|default:site_settings.meta_description }}"
+  />
+  <meta
+    name="keywords"
+    content="{{ meta_tag.meta_keywords|default:site_settings.meta_keywords }}"
+  />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta property="og:title" content="{{ meta_tag.meta_title|default:site_settings.meta_title }}">
-  <meta property="og:description" content="{{ meta_tag.meta_description|default:site_settings.meta_description }}">
-  <meta property="og:image" content="{{ meta_tag.og_image|default:site_settings.logo.url }}" />
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="{{ request.build_absolute_uri }}">
-  <meta property="og:site_name" content="{{ site_settings.meta_title }}">
-  <meta property="og:locale" content="fa_IR">
+  <meta
+    property="og:title"
+    content="{{ meta_tag.meta_title|default:site_settings.meta_title }}"
+  />
+  <meta
+    property="og:description"
+    content="{{ meta_tag.meta_description|default:site_settings.meta_description }}"
+  />
+  <meta
+    property="og:image"
+    content="{{ meta_tag.og_image|default:site_settings.logo.url }}"
+  />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="{{ request.build_absolute_uri }}" />
+  <meta property="og:site_name" content="{{ site_settings.meta_title }}" />
+  <meta property="og:locale" content="fa_IR" />
   <meta name="robots" content="{{ meta_tag.robots|default:'index, follow' }}" />
+  <!-- Google Tag Manager -->
+  {% if site_settings.google_tag_manager_id %}
+  <script>
+    (function (w, d, s, l, i) {
+      w[l] = w[l] || [];
+      w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+      var f = d.getElementsByTagName(s)[0],
+        j = d.createElement(s),
+        dl = l != "dataLayer" ? "&l=" + l : "";
+      j.async = true;
+      j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+      f.parentNode.insertBefore(j, f);
+    })(window, document, "script", "dataLayer", "{{ site_settings.google_tag_manager_id }}");
+  </script>
+  {% endif %}
+  <!-- End Google Tag Manager -->
   <link
     href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
     rel="stylesheet"
@@ -22,21 +53,46 @@
 
   {% if site_settings.clarity_tracking_id %}
   <script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "{{ site_settings.clarity_tracking_id }}");
+    (function (c, l, a, r, i, t, y) {
+      c[a] =
+        c[a] ||
+        function () {
+          (c[a].q = c[a].q || []).push(arguments);
+        };
+      t = l.createElement(r);
+      t.async = 1;
+      t.src = "https://www.clarity.ms/tag/" + i;
+      y = l.getElementsByTagName(r)[0];
+      y.parentNode.insertBefore(t, y);
+    })(
+      window,
+      document,
+      "clarity",
+      "script",
+      "{{ site_settings.clarity_tracking_id }}"
+    );
   </script>
+  {% endif %} {% if site_settings.umami_id %}
+  <script
+    defer
+    src="https://umami.roundstudio.ir/script.js"
+    data-website-id="{{ site_settings.umami_id }}"
+  ></script>
   {% endif %}
-
-  {% if site_settings.umami_id %}
-    <script defer src="https://umami.roundstudio.ir/script.js" data-website-id="{{ site_settings.umami_id }}"></script>
-  {% endif %}
-  <link rel="icon" href="{% url 'favicon_ico' %}" type="image/x-icon">
-<link rel="shortcut icon" href="{% url 'favicon_ico' %}" type="image/x-icon">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&family=Noto+Sans+Arabic:wght@100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+  <link rel="icon" href="{% url 'favicon_ico' %}" type="image/x-icon" />
+  <link
+    rel="shortcut icon"
+    href="{% url 'favicon_ico' %}"
+    type="image/x-icon"
+  />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&family=Noto+Sans+Arabic:wght@100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
+    rel="stylesheet"
+  />
 </head>
