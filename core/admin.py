@@ -146,8 +146,8 @@ class CategorySettingAdmin(SingletonAdmin):
         'theme_categories_page': admin.HORIZONTAL,
     }
     def get_queryset(self, request):
-        return Theme.objects.filter(pk=1)
+        return CategorySetting.objects.filter(pk=1)
     def has_add_permission(self, request):
-        return not Theme.objects.exists()
+        return not CategorySetting.objects.exists()
     def has_delete_permission(self, request, obj=None):
         return False

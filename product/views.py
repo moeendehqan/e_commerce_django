@@ -30,7 +30,7 @@ class CategoryListView(TemplateView):
     
 class CategoryDetailView(TemplateView):
     template_name = 'categories/category_detail.html'
-
+    setting = CategorySetting.get_instance()
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         slug = self.kwargs.get('slug')
