@@ -122,25 +122,23 @@ class ZarinpalAdmin(admin.ModelAdmin):
 
 
 @admin.register(Theme)
-class ThemeAdmin(admin.ModelAdmin):
+class ThemeAdmin(SingletonAdmin):
     fieldsets = (
-            (None, {
-                'fields': (
-                    'slider',
-                ),
-                'description': (
-                    '<p class="text-blue-600 font-bold">راهنما:</p>'
-                    '<p>در این بخش می‌توانید تم اسلایدر را ویرایش کنید.</p>'
-                ),
-            }),
-            (None, {
-                'fields': (
-                    'categories_page',
-                ),
-                'description': (
-                    '<p class="text-blue-600 font-bold">راهنما:</p>'
-                    '<p>در این بخش می‌توانید تم صفحه دسته بندی را ویرایش کنید.</p>'
-                ),
-            }),
-
-        )
+        (None, {
+            'fields': ('slider', 'categories_page'),
+            'description': (
+                '<p class="text-blue-600 font-bold">راهنما:</p>'
+                '<p>در این بخش می‌توانید تم اسلایدر و صفحه دسته‌بندی را تنظیم کنید.</p>'
+            ),
+        }),
+    )
+    radio_fields = {
+        'slider': admin.HORIZONTAL,
+        'categories_page': admin.HORIZONTAL,
+    }
+    def get_queryset(self, request):
+        return Theme.objects.filter(pk=1)
+    def has_add_permission(self, request):
+        return not Theme.objects.exists()
+    def has_delete_permission(self, request, obj=None):
+        return False

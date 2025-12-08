@@ -3,6 +3,7 @@ from django.views.generic import TemplateView
 from .models import Category, Product, Variant, ProductImage, ProductAttributeValue
 from core.utiles.meta_tag import MetaTag
 from core.models import SiteSettings
+from core.models import Theme
 
 
 
