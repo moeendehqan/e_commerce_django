@@ -10,6 +10,14 @@ from core.models import Theme
 class CategoryListView(TemplateView):
     template_name = 'categories/categories_classic.html'
 
+    def get_template_names(self):
+        theme = Theme.get_instance()
+        templates = {
+            'classic': 'categories/categories_classic.html',
+            'vertical': 'categories/categories_vertical.html',
+        }
+        return [templates.get(theme.categories_page, templates['classic'])]
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.filter(is_active=True, parent=None)
