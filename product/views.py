@@ -4,7 +4,7 @@ from .models import Category, Product, Variant, ProductImage, ProductAttributeVa
 from core.utiles.meta_tag import MetaTag
 from core.models import SiteSettings
 class CategoryListView(TemplateView):
-    template_name = 'product/categories.html'
+    template_name = 'categories/categories.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -15,7 +15,7 @@ class CategoryListView(TemplateView):
         return context
     
 class CategoryDetailView(TemplateView):
-    template_name = 'product/category_detail.html'
+    template_name = 'categories/category_detail.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
