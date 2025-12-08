@@ -37,6 +37,7 @@ class HomeView(TemplateView):
         if categories.exists() and category_setting.theme_categories_home!= 'None':
             context['categories'] = categories
             context['theme_categories_home'] = category_setting.theme_categories_home or 'story'
+            context['theme_categories_home_template'] = f"categories/categories_bar_home_{context['theme_categories_home']}.html"
         site_settings = SiteSettings.objects.first()
         meta_tag = MetaTag(title='خانه', description=site_settings.meta_description, image=site_settings.logo.url)
         context['meta_tag'] = meta_tag.full_meta_tag()
