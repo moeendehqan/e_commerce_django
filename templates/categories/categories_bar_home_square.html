@@ -1,0 +1,172 @@
+{% load static %}
+<section class="relative w-full my-[80px] bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden my-16 pb-14" aria-label="دسته‌بندی‌های فروشگاه">
+    <!-- جداکننده بالا -->
+    <div class="absolute top-0 left-0 w-full h-[80px] bg-gradient-to-b from-gray-50 via-white to-transparent pointer-events-none"></div>
+    
+    <!-- خط جداکننده بالا -->
+    <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-pink-400 via-purple-500 to-blue-400 rounded-full"></div>
+
+    <div class="relative z-10 px-4 pt-8">
+        <h2 class="text-3xl md:text-4xl font-extrabold text-center text-gray-800 mb-8">
+            دسته‌بندی‌های 
+        </h2>
+
+        <div class="relative flex justify-center items-center">
+            <!-- دکمه قبلی -->
+            <button 
+                id="cat-prev"
+                aria-label="قبلی"
+                class="hidden md:flex absolute left-0 z-10 bg-white/80 backdrop-blur-md p-4 rounded-full shadow-lg hover:bg-white transition"
+            >
+                <i class="fas fa-chevron-right text-gray-700 text-lg"></i>
+            </button>
+
+            <!-- لیست -->
+            <div 
+                id="category-slider" 
+                class="flex gap-12 overflow-x-auto scroll-smooth px-12 scrollbar-hide justify-center items-center"
+            >
+                {% for category in categories %}
+                    {% if category.is_active %}
+                        <div 
+                            class="category-card flex flex-col flex-shrink-0 group text-center w-56 md:w-64 bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden"
+                        >
+                            <div class="category-card-image w-full h-40 md:h-48 bg-gray-100 overflow-hidden">
+                                {% if category.image %}
+                                    <img 
+                                        src="{{ category.image.url }}" 
+                                        alt="{{ category.name }}" 
+                                        loading="lazy"
+                                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                    >
+                                {% else %}
+                                    <div class="w-full h-full flex items-center justify-center text-gray-500 text-sm">
+                                        بدون تصویر
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="p-4 space-y-3">
+                                <div class="text-base md:text-lg font-semibold text-gray-800 group-hover:text-pink-600 transition-colors duration-300">
+                                    {{ category.name }}
+                                </div>
+                                <a 
+                                    href="{{ category.get_absolute_url }}" 
+                                    title="{{ category.meta_title|default:category.name }}" 
+                                    aria-label="مشاهده دسته‌بندی {{ category.name }}"
+                                    class="inline-flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium bg-pink-600 text-white hover:bg-pink-700 transition-colors duration-200"
+                                >
+                                    مشاهده
+                                </a>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% empty %}
+                    <p class="text-gray-600 text-center w-full py-6">هیچ دسته‌بندی فعالی یافت نشد.</p>
+                {% endfor %}
+            </div>
+
+            <!-- دکمه بعدی -->
+            <button 
+                id="cat-next"
+                aria-label="بعدی"
+                class="hidden md:flex absolute right-0 z-10 bg-white/80 backdrop-blur-md p-4 rounded-full shadow-lg hover:bg-white transition"
+            >
+                <i class="fas fa-chevron-left text-gray-700 text-lg"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- خط جداکننده پایین -->
+    <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-pink-400 via-purple-500 to-blue-400 rounded-full"></div>
+    
+    <!-- جداکننده پایین -->
+    <div class="absolute bottom-0 left-0 w-full h-[80px] bg-gradient-to-t from-gray-50 via-white to-transparent pointer-events-none"></div>
+</section>
+
+<style>
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* انیمیشن رنگین‌کمان */
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-gradientMove {
+  background-size: 200% 200%;
+  animation: gradientMove 5s ease infinite;
+}
+
+/* استایل کادر استوری اینستاگرام */
+.category-story-border {
+  background: linear-gradient(45deg, 
+    #f09433 0%, 
+    #e6683c 25%, 
+    #dc2743 50%, 
+    #cc2366 75%, 
+    #bc1888 100%);
+  padding: 3px;
+  border-radius: 50%;
+  position: relative;
+}
+
+.category-story-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 3px;
+  background: linear-gradient(45deg, 
+    #f09433 0%, 
+    #e6683c 25%, 
+    #dc2743 50%, 
+    #cc2366 75%, 
+    #bc1888 100%);
+  border-radius: 50%;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: xor;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+}
+
+/* سایه و افکت‌های اضافی برای جداسازی بهتر */
+section {
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(255, 255, 255, 0.8),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* افکت hover برای کل بخش */
+section:hover {
+  transform: translateY(-2px);
+  transition: transform 0.3s ease;
+  box-shadow: 
+    0 32px 64px -12px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.9),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const slider = document.getElementById("category-slider");
+    const next = document.getElementById("cat-next");
+    const prev = document.getElementById("cat-prev");
+
+    if (window.innerWidth >= 768) {
+        next.classList.remove("hidden");
+        prev.classList.remove("hidden");
+    }
+
+    next.addEventListener("click", () => {
+        slider.scrollBy({ left: 300, behavior: "smooth" });
+    });
+
+    prev.addEventListener("click", () => {
+        slider.scrollBy({ left: -300, behavior: "smooth" });
+    });
+});
+</script>
