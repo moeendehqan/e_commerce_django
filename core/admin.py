@@ -3,6 +3,7 @@ from .models import Slider, SiteSettings, HomeOption, SmsSetting, Zarinpal
 from django.contrib import admin
 from django.shortcuts import redirect
 from django.urls import reverse
+from .models import Theme
 
 @admin.register(Slider)
 class SliderAdmin(admin.ModelAdmin):

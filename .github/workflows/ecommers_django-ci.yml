@@ -48,6 +48,10 @@ jobs:
             EOF
             echo "✅ فایل .env ساخته شد."
 
+            echo "🔹 فعال‌سازی BuildKit برای کش سریع‌تر"
+            export DOCKER_BUILDKIT=1
+            export COMPOSE_DOCKER_CLI_BUILD=1
+
             echo "🔹 اجرای Docker Compose: توقف کانتینرهای قبلی"
             docker compose down
             echo "✅ کانتینرها متوقف شدند."
@@ -59,10 +63,6 @@ jobs:
             echo "🔹 Build و اجرای کانتینرها"
             docker compose up -d --build
             echo "✅ کانتینرها با موفقیت اجرا شدند."
-
-            echo "🔹 پاکسازی Docker"
-            docker system prune -f
-            echo "✅ پاکسازی انجام شد."
 
             echo "🔹 وضعیت کانتینرها"
             docker ps
