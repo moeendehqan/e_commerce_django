@@ -1,7 +1,6 @@
 from django.db import models
 
 
-
 class AboutUs(models.Model):
     title = models.CharField(max_length=200, verbose_name="عنوان")
     subtitle = models.CharField(max_length=200, verbose_name="زیرعنوان", null=True, blank=True)
