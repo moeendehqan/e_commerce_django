@@ -3,6 +3,9 @@ from user.models import User, Address
 from product.models import Product, Variant
 from django.core.validators import MinValueValidator
 import uuid
+from .telegram import TelegramService
+from core.models import TelegramSetting
+
 
 class Basket(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='baskets', null=True, blank=True, verbose_name='کاربر')
@@ -72,11 +75,26 @@ class Order(models.Model):
 
     def __str__(self):
         return self.order_number
+    
+    def send_telegram_notification(self):
+        telegram_setting = TelegramSetting.get_instance()
+        if not telegram_setting.notification_new_order:
+            return
+        message = f"سفارش جدید:\n"
+        message += f"شناسه سفارش: {self.order_number}\n"
+        message += f"کاربر: {self.user.username}\n"
+        message += f"مبلغ کل: {self.total_price} تومان\n"
+        message += f"آدرس: {self.address}\n"
+        message += f"وضعیت: {self.status}"
+        telegram_service = TelegramService()
+        telegram_service.send_message(message)
+
 
     def save(self, *args, **kwargs):
         if not self.order_number:
             self.order_number = f"ORD-{uuid.uuid4().hex[:8]}"
         super().save(*args, **kwargs)
+        self.send_telegram_notification()
     class Meta:
         verbose_name = 'سفارش'
         verbose_name_plural = 'سفارشات'
