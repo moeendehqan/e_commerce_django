@@ -1,6 +1,8 @@
 from django.db import models
 import os
 from django.core.exceptions import ValidationError
+from .service import TelegramService
+
 def validate_favicon(value):
     ext = os.path.splitext(value.name)[1].lower()
     if ext != '.ico':
@@ -8,6 +10,26 @@ def validate_favicon(value):
 
     if value.size > 1024 * 1024: 
         raise ValidationError('حجم فایل فایکون نباید بیشتر از 1 مگابایت باشد')
+
+
+
+class TelegramSetting(models.Model):
+    token = models.CharField(max_length=255, null=True, blank=True, verbose_name='توکن تلگرام')
+    notification_new_order = models.BooleanField(default=True, verbose_name='اطلاع رسانی سفارش جدید')
+    notification_new_contact = models.BooleanField(default=True, verbose_name='اطلاع رسانی تماس با مای جدید')
+    chat_id = models.CharField(max_length=255, null=True, blank=True, verbose_name='آیدی چت تلگرام')
+    def save(self, *args, **kwargs):
+        self.pk = 1
+        super().save(*args, **kwargs)
+    @classmethod
+    def get_instance(cls):
+        obj, created = cls.objects.get_or_create(pk=1)
+        return obj
+    def __str__(self):
+        return "تنظیمات تلگرام"
+    class Meta:
+        verbose_name = 'تنظیمات تلگرام'
+        verbose_name_plural = 'تنظیمات تلگرام'
 
 
 class Slider(models.Model):
@@ -148,6 +170,23 @@ class ContactMessage(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.subject}"
+    
+    def send_telegram_notification(self):
+        telegram_service = TelegramService()
+        message = f"""
+        پیام جدید تماس با ما
+        نام: {self.name}
+        ایمیل: {self.email}
+        موضوع: {self.subject}
+        پیام: {self.message}
+        """
+        telegram_service.send_message(message)
+    
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        telegram_setting = TelegramSetting.get_instance()
+        if telegram_setting.notification_new_contact:
+            self.send_telegram_notification()
 
     class Meta:
         verbose_name = "پیام تماس"
@@ -174,24 +213,6 @@ class Zarinpal(models.Model):
         verbose_name = 'تنظیمات زرین پال'
         verbose_name_plural = 'تنظیمات زرین پال'
 
-
-class TelegramSetting(models.Model):
-    token = models.CharField(max_length=255, null=True, blank=True, verbose_name='توکن تلگرام')
-    notification_new_order = models.BooleanField(default=True, verbose_name='اطلاع رسانی سفارش جدید')
-    notification_new_contact = models.BooleanField(default=True, verbose_name='اطلاع رسانی تماس با مای جدید')
-    chat_id = models.CharField(max_length=255, null=True, blank=True, verbose_name='آیدی چت تلگرام')
-    def save(self, *args, **kwargs):
-        self.pk = 1
-        super().save(*args, **kwargs)
-    @classmethod
-    def get_instance(cls):
-        obj, created = cls.objects.get_or_create(pk=1)
-        return obj
-    def __str__(self):
-        return "تنظیمات تلگرام"
-    class Meta:
-        verbose_name = 'تنظیمات تلگرام'
-        verbose_name_plural = 'تنظیمات تلگرام'
 
 
 class CategorySetting(models.Model):
