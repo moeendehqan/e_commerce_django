@@ -21,7 +21,6 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: 22
           script: |
-            # توقف اجرای اسکریپت در صورت هر خطایی
             set -e
 
             echo "🔹 ورود به مسیر سرور"
