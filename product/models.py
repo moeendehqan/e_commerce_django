@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 from django.urls import reverse
-from .utiles import convert_to_webp
+from utiles.convert_to_webp import convert_to_webp
 
 
 class Color(models.Model):

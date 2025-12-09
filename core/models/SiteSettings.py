@@ -1,5 +1,5 @@
 from django.db import models
-from product.utiles import convert_to_webp
+from utiles.convert_to_webp import convert_to_webp
 import os
 
 def validate_favicon(value):
