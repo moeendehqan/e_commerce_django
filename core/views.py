@@ -46,10 +46,11 @@ class HomeView(TemplateView):
 class AboutPage(TemplateView):
     template_name = 'about_page.html'
     def get_context_data(self, **kwargs):
+        about_us = AboutUs.get_instance()
         context = super().get_context_data(**kwargs)
-        site_settings = SiteSettings.objects.first()
-        meta_tag = MetaTag(title='درباره ما', description=site_settings.about_us, image=site_settings.about_us_image.url)
+        meta_tag = MetaTag(title=about_us.title, description=about_us.subtitle, image=about_us.image.url)
         context['meta_tag'] = meta_tag.full_meta_tag()
+        context['about_us'] = about_us
         return context
 
 

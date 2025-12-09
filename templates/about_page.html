@@ -7,19 +7,19 @@
   <!-- عنوان -->
   <header class="text-center">
     <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
-      درباره ما
+      {{ about_us.title }}
     </h1>
     <p class="text-gray-600 max-w-2xl mx-auto text-lg">
-      با ما بیشتر آشنا شوید؛ رسالت ما اعتماد، نوآوری و ارائه بهترین خدمات به شماست.
+      {{ about_us.subtitle }}
     </p>
   </header>
 
   <!-- بخش معرفی شرکت -->
   <section class="grid md:grid-cols-2 gap-10 items-center bg-white rounded-2xl shadow-lg p-8">
-    {% if site_settings.about_us_image %}
+    {% if about_us.image %}
       <div class="rounded-xl overflow-hidden shadow-md">
-        <img src="{{ site_settings.about_us_image.url }}" 
-             alt="{{ site_settings.meta_title }} - درباره ما" 
+        <img src="{{ about_us.image.url }}" 
+             alt="{{ about_us.title }}" 
              class="w-full h-full object-cover">
       </div>
     {% endif %}
@@ -27,11 +27,11 @@
     <div>
       <h2 class="text-2xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
         <i class="fas fa-building text-blue-600"></i>
-        درباره شرکت ما
+        {{ about_us.title_content }}
       </h2>
-      {% if site_settings.about_us %}
+      {% if about_us.description %}
         <p class="text-gray-700 leading-relaxed text-base">
-          {{ site_settings.about_us|linebreaks }}
+          {{ about_us.description|linebreaks }}
         </p>
       {% endif %}
     </div>
@@ -68,12 +68,12 @@
       "url": "{{ request.build_absolute_uri }}",
       "mainEntity": {
         "@type": "Organization",
-        "name": "{{ site_settings.title }}",
-        "description": "{{ site_settings.description|escapejs }}",
-        "logo": "{{ request.build_absolute_uri }}{{ site_settings.logo.url }}",
+        "name": "{{ about_us.title }}",
+        "description": "{{ about_us.description|escapejs }}",
+        "logo": "{{ request.build_absolute_uri }}{{ about_us.image.url }}",
         "contactPoint": {
           "@type": "ContactPoint",
-          "telephone": "{{ site_settings.phone }}",
+          "telephone": "{{ about_us.phone }}",
           "contactType": "customer service",
           "areaServed": "IR",
           "availableLanguage": ["Persian"]
