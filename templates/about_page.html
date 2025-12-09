@@ -9,9 +9,11 @@
     <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
       {{ about_us.title }}
     </h1>
+    {% if about_us.subtitle %}
     <p class="text-gray-600 max-w-2xl mx-auto text-lg">
       {{ about_us.subtitle }}
     </p>
+    {% endif %}
   </header>
 
   <!-- بخش معرفی شرکت -->

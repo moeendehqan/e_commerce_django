@@ -5,7 +5,7 @@ from utiles.convert_to_webp import convert_to_webp
 
 class AboutUs(models.Model):
     title = models.CharField(max_length=200, verbose_name="عنوان")
-    subtitle = models.CharField(max_length=200, verbose_name="زیرعنوان")
+    subtitle = models.CharField(max_length=200, verbose_name="زیرعنوان", null=True, blank=True)
     title_content = models.TextField(verbose_name="محتوا عنوان")
     content = models.TextField(verbose_name="محتوا")
     THEME_CHOICES = [
