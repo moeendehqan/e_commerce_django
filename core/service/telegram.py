@@ -1,4 +1,4 @@
-from .models import TelegramSetting
+from core.models import TelegramSetting
 import requests
 
 
