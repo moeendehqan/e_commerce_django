@@ -3,3 +3,6 @@ core/__pycache__/__init__.cpython-313.pyc
 */__pycache__/*
 */migrations/*
 *.env
+# **/__pycache__/*
+# */migrations/__init__.py
+# */migrations/*
