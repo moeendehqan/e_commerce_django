@@ -1,14 +1,15 @@
-from core.models import TelegramSetting
+from django.apps import apps
 import requests
 
 
 
 class TelegramService:
     def __init__(self):
+        TelegramSetting = apps.get_model('core', 'TelegramSetting')
         self.telegram_setting = TelegramSetting.get_instance()
-        self.token = self.telegram_setting.token
-        self.chat_ids = self.telegram_setting.chat_id.split(',')
-        self.chat_ids = [chat_id.strip() for chat_id in self.chat_ids]
+        self.token = (self.telegram_setting.token or '').strip()
+        chat_ids_raw = (self.telegram_setting.chat_id or '')
+        self.chat_ids = [c.strip() for c in chat_ids_raw.split(',') if c.strip()]
     def send_message(self, message: str):
         for chat_id in self.chat_ids:
             self.send_message_to_chat_id(chat_id, message)
