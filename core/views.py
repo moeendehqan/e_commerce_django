@@ -10,7 +10,7 @@ from django.contrib import messages
 from .models import ContactMessage
 from .forms import ContactForm 
 from .models import HomeOption
-from .models import CategorySetting
+from .models import CategorySetting, AboutUs
 import os
 from django.http import FileResponse
 from core.utiles.meta_tag import MetaTag
