@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.shortcuts import redirect
 from django.urls import reverse
-from .models import Slider, SiteSettings, HomeOption, SmsSetting, Zarinpal, CategorySetting
+from .models import Slider, SiteSettings, HomeOption, SmsSetting, Zarinpal, CategorySetting, TelegramSetting
 
 class SingletonAdmin(admin.ModelAdmin):
     singleton_pk = 1
@@ -150,5 +150,23 @@ class CategorySettingAdmin(SingletonAdmin):
         return CategorySetting.objects.filter(pk=1)
     def has_add_permission(self, request):
         return not CategorySetting.objects.exists()
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+@admin.register(TelegramSetting)
+class TelegramSettingAdmin(SingletonAdmin):
+    fieldsets = (
+        (None, {
+            'fields': ('token', 'chat_id', 'notification_new_order', 'notification_new_contact'),
+            'description': (
+                '<p class="text-blue-600 font-bold">راهنما:</p>'
+                '<p>در این بخش می‌توانید تنظیمات تلگرام را ویرایش کنید.</p>'
+            ),
+        }),
+    )
+    def get_queryset(self, request):
+        return TelegramSetting.objects.filter(pk=1)
+    def has_add_permission(self, request):
+        return not TelegramSetting.objects.exists()
     def has_delete_permission(self, request, obj=None):
         return False
