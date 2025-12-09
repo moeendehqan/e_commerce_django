@@ -64,7 +64,6 @@ class SiteSettings(models.Model):
     favicon = models.FileField(upload_to='media/favicon/', validators=[validate_favicon])
     about_us = models.TextField(blank=True, null=True)
     about_us_image = models.ImageField(upload_to='media/about_us_image/', blank=True, null=True)
-    telegram_bot = models.CharField(max_length=1000, blank=True, null=True)
     contact_us = models.TextField(blank=True, null=True)
     contact_us_image = models.ImageField(upload_to='media/contact_us_image/', blank=True, null=True)
     clarity_tracking_id = models.CharField(

@@ -24,9 +24,9 @@ class SliderAdmin(admin.ModelAdmin):
 
 @admin.register(SiteSettings)
 class SiteSettingsAdmin(admin.ModelAdmin):
-    list_display = ('meta_title', 'meta_description', 'meta_keywords', 'enamad', 'telegram', 'instagram', 'phone', 'email', 'address', 'logo', 'favicon', 'about_us', 'about_us_image', 'telegram_bot', 'contact_us', 'contact_us_image')
-    search_fields = ('meta_title', 'meta_description', 'meta_keywords', 'enamad', 'telegram', 'instagram', 'phone', 'email', 'address', 'logo', 'favicon', 'about_us', 'about_us_image', 'telegram_bot', 'contact_us', 'contact_us_image')
-    list_filter = ('meta_title', 'meta_description', 'meta_keywords', 'enamad', 'telegram', 'instagram', 'phone', 'email', 'address', 'logo', 'favicon', 'about_us', 'about_us_image', 'telegram_bot', 'contact_us', 'contact_us_image')
+    list_display = ('meta_title', 'meta_description', 'meta_keywords', 'enamad', 'telegram', 'instagram', 'phone', 'email', 'address', 'logo', 'favicon', 'about_us', 'about_us_image', 'contact_us', 'contact_us_image')
+    search_fields = ('meta_title', 'meta_description', 'meta_keywords', 'enamad', 'telegram', 'instagram', 'phone', 'email', 'address', 'logo', 'favicon', 'about_us', 'about_us_image', 'contact_us', 'contact_us_image')
+    list_filter = ('meta_title', 'meta_description', 'meta_keywords', 'enamad', 'telegram', 'instagram', 'phone', 'email', 'address', 'logo', 'favicon', 'about_us', 'about_us_image', 'contact_us', 'contact_us_image')
     list_per_page = 10
     def changelist_view(self, request, extra_context=None):
         SmsSetting.get_instance()
