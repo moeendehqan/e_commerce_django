@@ -1,5 +1,4 @@
 from django.db import models
-from utiles.convert_to_webp import convert_to_webp
 
 
 
