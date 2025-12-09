@@ -1,7 +1,6 @@
 from django.db import models
 from product.utiles import convert_to_webp
 import os
-from django.core.exceptions import ValidationError
 
 def validate_favicon(value):
     ext = os.path.splitext(value.name)[1].lower()
@@ -10,8 +9,6 @@ def validate_favicon(value):
 
     if value.size > 1024 * 1024: 
         raise ValidationError('حجم فایل فایکون نباید بیشتر از 1 مگابایت باشد')
-
-
 
 class SiteSettings(models.Model):
     url = models.URLField(blank=True, null=True)
