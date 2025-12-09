@@ -2,6 +2,7 @@ from django.db import models
 import os
 from django.core.exceptions import ValidationError
 from .service import TelegramService
+from product.utiles import convert_to_webp
 
 def validate_favicon(value):
     ext = os.path.splitext(value.name)[1].lower()
@@ -62,8 +63,6 @@ class SiteSettings(models.Model):
     address = models.TextField(blank=True, null=True)
     logo = models.ImageField(upload_to='media/logo/')
     favicon = models.FileField(upload_to='media/favicon/', validators=[validate_favicon])
-    about_us = models.TextField(blank=True, null=True)
-    about_us_image = models.ImageField(upload_to='media/about_us_image/', blank=True, null=True)
     contact_us = models.TextField(blank=True, null=True)
     contact_us_image = models.ImageField(upload_to='media/contact_us_image/', blank=True, null=True)
     clarity_tracking_id = models.CharField(
@@ -167,10 +166,15 @@ class AboutUs(models.Model):
     ]
     theme = models.CharField(max_length=200, verbose_name="تم صفحه", choices=THEME_CHOICES, default='two_column')
     image = models.ImageField(upload_to='media/about_us_image/', blank=True, null=True, verbose_name="تصویر")
+    class Meta:
+        verbose_name = 'درباره ما'
+        verbose_name_plural = 'درباره ما'
     def __str__(self):
         return self.title
     def save(self, *args, **kwargs):
         self.pk = 1 
+        if self.image:
+            self.image = convert_to_webp(self.image)
         super().save(*args, **kwargs)
     @classmethod
     def get_instance(cls):
