@@ -1,5 +1,5 @@
 from django.db import models
-from .service import TelegramService
+from core.service import TelegramService
 from .TelegramSetting import TelegramSetting
 
 

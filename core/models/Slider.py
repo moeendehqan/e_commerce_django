@@ -1,5 +1,4 @@
 from django.db import models
-import os
 from product.utiles import convert_to_webp
 
 
