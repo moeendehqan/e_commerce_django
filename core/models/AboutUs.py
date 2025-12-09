@@ -20,8 +20,6 @@ class AboutUs(models.Model):
         return self.title
     def save(self, *args, **kwargs):
         self.pk = 1 
-        if self.image:
-            self.image = convert_to_webp(self.image)
         super().save(*args, **kwargs)
     @classmethod
     def get_instance(cls):
