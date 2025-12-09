@@ -3,7 +3,7 @@ from user.models import User, Address
 from product.models import Product, Variant
 from django.core.validators import MinValueValidator
 import uuid
-from .telegram import TelegramService
+from core.telegram import TelegramService
 from core.models import TelegramSetting
 
 
