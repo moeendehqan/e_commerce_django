@@ -21,7 +21,7 @@
         <!-- آلبوم عکس -->
         <div>
             <img id="main-image" src="{{ product.image.url }}" alt="{{ product.name }}"
-                 class="w-full h-96 object-cover rounded-lg shadow-lg mb-4">
+                 class="w-full aspect-square object-cover rounded-lg shadow-lg mb-4">
             <div class="grid grid-cols-4 gap-2">
                 {% for image in product_images %}
                     <img src="{{ image.image.url }}" alt="{{ product.name }}"

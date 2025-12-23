@@ -1,3 +1,4 @@
+{% load humanize %}
 <div class="w-80 shadow-lg rounded-lg overflow-hidden bg-white flex flex-col transition-all hover:shadow-2xl">
     <!-- تصویر محصول -->
     <div class="relative">
@@ -21,11 +22,11 @@
         <!-- قیمت -->
         {% if product.discount_percentage > 0 %}
             <div class="flex items-center gap-2">
-                <p class="text-gray-400 text-sm line-through">{{ product.price }} تومان</p>
-                <p class="text-red-500 text-lg font-bold">{{ product.real_price }} تومان</p>
+                <p class="text-gray-400 text-sm line-through">{{ product.price|intcomma }} تومان</p>
+                <p class="text-red-500 text-lg font-bold">{{ product.real_price|intcomma }} تومان</p>
             </div>
         {% else %}
-            <p class="text-gray-800 text-lg font-bold">{{ product.price }} تومان</p>
+            <p class="text-gray-800 text-lg font-bold">{{ product.price|intcomma }} تومان</p>
         {% endif %}
 
         <!-- میزان مشاهده و فروش -->
