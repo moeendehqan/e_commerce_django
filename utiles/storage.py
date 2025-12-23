@@ -36,9 +36,3 @@ class MinioStorage(S3Boto3Storage):
         kwargs['addressing_style'] = 'path'
         
         super().__init__(*args, **kwargs)
-
-    def _save(self, name, content):
-        # Clean the name to prevent issues with double slashes or similar
-        clean_name = self._clean_name(name)
-        # Use the parent's _save method directly
-        return super()._save(clean_name, content)
