@@ -29,8 +29,16 @@ class MinioStorage(S3Boto3Storage):
         
         # MinIO-specific settings
         kwargs['custom_domain'] = os.getenv('MINIO_CUSTOM_DOMAIN', None)
-        kwargs['file_overwrite'] = False
+        # Setting file_overwrite to True prevents django-storages from calling exists() (HeadObject)
+        # before saving, avoiding the 403 Forbidden error if permissions are restricted.
+        kwargs['file_overwrite'] = True 
         kwargs['signature_version'] = 's3v4'
         kwargs['addressing_style'] = 'path'
         
         super().__init__(*args, **kwargs)
+
+    def _save(self, name, content):
+        # Clean the name to prevent issues with double slashes or similar
+        clean_name = self._clean_name(name)
+        # Use the parent's _save method directly
+        return super()._save(clean_name, content)
