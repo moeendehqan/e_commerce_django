@@ -14,8 +14,12 @@ class Slider(models.Model):
     def __str__(self):
         return self.alt
     def save(self, *args, **kwargs):
-        self.image = convert_to_webp(self.image.path)
         super().save(*args, **kwargs)
+        if self.image:
+            webp_path = convert_to_webp(self, 'image')
+            if webp_path:
+                self.image.name = webp_path
+                super().save(update_fields=['image'])
     class Meta:
         verbose_name = 'اسلایدر'
         verbose_name_plural = 'اسلایدرها'

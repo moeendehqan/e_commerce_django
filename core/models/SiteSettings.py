@@ -55,9 +55,12 @@ class SiteSettings(models.Model):
         return self.meta_title
     def save(self, *args, **kwargs):
         self.pk = 1 
-        if self.logo:
-            self.logo = convert_to_webp(self.logo.path)
         super().save(*args, **kwargs)
+        if self.logo:
+            webp_path = convert_to_webp(self, 'logo')
+            if webp_path:
+                self.logo.name = webp_path
+                super().save(update_fields=['logo'])
     @classmethod
     def get_instance(cls):
         obj, created = cls.objects.get_or_create(pk=1)
