@@ -64,33 +64,25 @@
                         <span class="text-gray-600">برند:</span>
                         <span class="font-medium text-gray-800">{{ product.brand.name }}</span>
                     </div>
-                {% else %}
-                    <div class="flex items-center space-x-2 space-x-reverse">
-                        <i class="fas fa-trademark text-gray-500"></i>
-                        <span class="text-gray-600">برند:</span>
-                        <span class="text-gray-400">موجود نیست</span>
-                    </div>
                 {% endif %}
                 
                 <!-- جدید -->
-                <div class="flex items-center space-x-2 space-x-reverse">
-                    <i class="fas {% if product.new %}fa-box{% else %}fa-box-open{% endif %} text-gray-500"></i>
-                    <span class="text-gray-600">نوع:</span>
-                    <span class="font-medium text-gray-800">
-                        {% if product.new %}نو (جدید){% else %}دسته دوم{% endif %}
-                    </span>
-                </div>
+                {% if not product.new %}
+                    <div class="flex items-center space-x-2 space-x-reverse">
+                        <i class="fas fa-box-open text-gray-500"></i>
+                        <span class="text-gray-600">نوع:</span>
+                        <span class="font-medium text-gray-800">دسته دوم</span>
+                    </div>
+                {% endif %}
                 
                 <!-- گارانتی -->
-                <div class="flex items-center space-x-2 space-x-reverse">
-                    <i class="fas fa-shield-alt text-gray-500"></i>
-                    <span class="text-gray-600">گارانتی:</span>
-                    {% if product.waranty %}
+                {% if product.waranty %}
+                    <div class="flex items-center space-x-2 space-x-reverse">
+                        <i class="fas fa-shield-alt text-gray-500"></i>
+                        <span class="text-gray-600">گارانتی:</span>
                         <span class="font-medium text-gray-800">{{ product.waranty }}</span>
-                    {% else %}
-                        <span class="text-gray-400">موجود نیست</span>
-                    {% endif %}
-                </div>
+                    </div>
+                {% endif %}
             </div>
 
             <!-- فرم افزودن به سبد -->
@@ -99,7 +91,8 @@
                 <input type="hidden" name="variant_id" id="selected-variant-id" value="{{ default_variant.id }}">
                 <div class="flex items-center gap-4">
                     <label for="quantity" class="text-gray-700 font-medium">تعداد:</label>
-                    <input type="number" name="quantity" id="quantity" value="1" min="1" 
+                    <input type="number" name="quantity" id="quantity" value="1" min="1" max="{{ default_variant.quantity }}"
+                           oninput="if(parseInt(this.value) > parseInt(this.max)) this.value = this.max;"
                            class="w-20 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <button type="submit" id="add-to-cart-btn"
                             class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors flex items-center {% if default_variant.quantity <= 0 %}opacity-50 cursor-not-allowed{% endif %}"
@@ -172,16 +165,28 @@ function selectVariant(card) {
     // به‌روزرسانی فرم
     document.getElementById('selected-variant-id').value = variantId;
     
+    // به‌روزرسانی ورودی تعداد
+    const quantityInput = document.getElementById('quantity');
+    quantityInput.max = quantity;
+    if (parseInt(quantityInput.value) > parseInt(quantity)) {
+        quantityInput.value = quantity;
+    }
+    
     // فعال/غیرفعال کردن دکمه افزودن به سبد
     const addButton = document.getElementById('add-to-cart-btn');
     if (quantity > 0) {
         addButton.classList.remove('opacity-50', 'cursor-not-allowed');
         addButton.removeAttribute('disabled');
+        quantityInput.removeAttribute('disabled');
+        if(quantityInput.value == 0) quantityInput.value = 1;
     } else {
         addButton.classList.add('opacity-50', 'cursor-not-allowed');
         addButton.setAttribute('disabled', 'true');
+        quantityInput.setAttribute('disabled', 'true');
+        quantityInput.value = 0;
     }
 }
+</script>
 
 <script type="application/ld+json">
     {
@@ -225,7 +230,4 @@ function selectVariant(card) {
       }
     }
     </script>
-    
-    
-</script>
 {% endblock %}
