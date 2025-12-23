@@ -1,6 +1,7 @@
 from django.db import models
 from utiles.convert_to_webp import convert_to_webp
 from core.utiles import validate_favicon
+from utiles.storage import MinioStorage
 
 
 
@@ -18,10 +19,10 @@ class SiteSettings(models.Model):
     phone = models.CharField(max_length=1000, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
     address = models.TextField(blank=True, null=True)
-    logo = models.ImageField(upload_to='media/logo/')
-    favicon = models.FileField(upload_to='media/favicon/', validators=[validate_favicon])
+    logo = models.ImageField(upload_to='media/logo/', storage=MinioStorage())
+    favicon = models.FileField(upload_to='media/favicon/', validators=[validate_favicon], storage=MinioStorage())
     contact_us = models.TextField(blank=True, null=True)
-    contact_us_image = models.ImageField(upload_to='media/contact_us_image/', blank=True, null=True)
+    contact_us_image = models.ImageField(upload_to='media/contact_us_image/', blank=True, null=True, storage=MinioStorage())
     clarity_tracking_id = models.CharField(
         max_length=20,
         blank=True,

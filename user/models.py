@@ -4,6 +4,7 @@ from django.utils.crypto import get_random_string
 from django.utils import timezone
 from datetime import timedelta
 import uuid
+from utiles.storage import MinioStorage
 
 def generate_referral_code():
     return str(uuid.uuid4())[:6].lower()
@@ -26,7 +27,7 @@ class Otp(models.Model):
 class User(AbstractUser):
     mobile = models.CharField(max_length=11, unique=True, verbose_name='شماره موبایل')
     email = models.EmailField(null=True, blank=True, verbose_name='ایمیل')
-    avatar = models.ImageField(upload_to='media/avatar/', default='media/avatar/default.png', verbose_name='تصویر آواتار')
+    avatar = models.ImageField(upload_to='media/avatar/', default='media/avatar/default.png', verbose_name='تصویر آواتار', storage=MinioStorage())
     gender = models.CharField(max_length=10, choices=[('male', 'مرد'), ('female', 'زن')], default='male', verbose_name='جنسیت')
     referral_code = models.CharField(max_length=6, unique=True, default=generate_referral_code, verbose_name='کد معرف')
     invite_code = models.CharField(max_length=6, null=True, blank=True, verbose_name='کد معرفی کننده')

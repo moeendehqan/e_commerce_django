@@ -1,4 +1,6 @@
 from django.db import models
+from utiles.storage import MinioStorage
+
 
 
 class AboutUs(models.Model):
@@ -10,7 +12,7 @@ class AboutUs(models.Model):
         ('two_column', ' دو ستونی'),
     ]
     theme = models.CharField(max_length=200, verbose_name="تم صفحه", choices=THEME_CHOICES, default='two_column')
-    image = models.ImageField(upload_to='media/about_us_image/', blank=True, null=True, verbose_name="تصویر")
+    image = models.ImageField(upload_to='media/about_us_image/', blank=True, null=True, verbose_name="تصویر", storage=MinioStorage())
     class Meta:
         verbose_name = 'درباره ما'
         verbose_name_plural = 'درباره ما'

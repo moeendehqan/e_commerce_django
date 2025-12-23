@@ -7,6 +7,7 @@ from core.service import TelegramService
 from core.models import TelegramSetting
 
 
+
 class Basket(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='baskets', null=True, blank=True, verbose_name='کاربر')
     variant = models.ForeignKey(Variant, on_delete=models.CASCADE, related_name='baskets', verbose_name='تنوع محصول')

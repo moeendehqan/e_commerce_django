@@ -1,10 +1,11 @@
 from django.db import models
 from utiles.convert_to_webp import convert_to_webp
+from utiles.storage import MinioStorage
 
 
 class Slider(models.Model):
     alt = models.CharField(max_length=200, verbose_name='عنوان')
-    image = models.ImageField(upload_to='media/sliders/', verbose_name='تصویر')
+    image = models.ImageField(upload_to='media/sliders/', verbose_name='تصویر', storage=MinioStorage())
     link = models.URLField(blank=True, null=True, verbose_name='لینک')
     active = models.BooleanField(default=True, verbose_name='فعال')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')

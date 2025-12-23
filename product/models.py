@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.text import slugify
 from django.urls import reverse
 from utiles.convert_to_webp import convert_to_webp
+from utiles.storage import MinioStorage
 
 
 class Color(models.Model):
@@ -31,7 +32,7 @@ class Size(models.Model):
 class Brand(models.Model):
     name = models.CharField(max_length=200, verbose_name='نام برند')
     slug = models.SlugField(max_length=200, verbose_name='اسلاگ')
-    image = models.ImageField(upload_to='media/brand/', null=True, blank=True, verbose_name='تصویر')
+    image = models.ImageField(upload_to='media/brand/', null=True, blank=True, verbose_name='تصویر', storage=MinioStorage())
     description = models.TextField(verbose_name='توضیحات')
     meta_title = models.CharField(max_length=200, verbose_name='عنوان متا')
     meta_description = models.TextField(verbose_name='توضیحات متا')
@@ -58,7 +59,7 @@ class ProductAttribute(models.Model):
 class Category(models.Model):
     name = models.CharField(max_length=200, verbose_name='نام دسته‌بندی')
     slug = models.SlugField(max_length=200, verbose_name='اسلاگ')
-    image = models.ImageField(upload_to='media/category/', null=True, blank=True, verbose_name='تصویر')
+    image = models.ImageField(upload_to='media/category/', null=True, blank=True, verbose_name='تصویر', storage=MinioStorage())
     parent = models.ForeignKey('self', on_delete=models.SET_NULL, related_name='children', null=True, blank=True, verbose_name='دسته‌بندی والد')
     description = models.TextField(verbose_name='توضیحات')
     meta_title = models.CharField(max_length=200, verbose_name='عنوان متا')
@@ -90,7 +91,7 @@ class Product(models.Model):
     description = models.TextField(verbose_name='توضیحات')
     brand = models.ForeignKey(Brand, on_delete=models.SET_NULL, related_name='products', null=True, blank=True, verbose_name='برند')
     new = models.BooleanField(default=True, verbose_name='جدید')
-    image = models.ImageField(upload_to='media/product/', null=True, blank=True, verbose_name='تصویر')
+    image = models.ImageField(upload_to='media/product/', null=True, blank=True, verbose_name='تصویر', storage=MinioStorage())
     meta_title = models.CharField(max_length=200, verbose_name='عنوان متا')
     meta_description = models.TextField(verbose_name='توضیحات متا')
     meta_keywords = models.TextField(verbose_name='کلمات کلیدی')
@@ -173,7 +174,7 @@ class Variant(models.Model):
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images', verbose_name='محصول')
-    image = models.ImageField(upload_to='media/product_images/', null=True, blank=True, verbose_name='تصویر')
+    image = models.ImageField(upload_to='media/product_images/', null=True, blank=True, verbose_name='تصویر', storage=MinioStorage())
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='تاریخ به‌روزرسانی')
     def __str__(self):
